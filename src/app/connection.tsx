@@ -1,0 +1,7 @@
+import { useState } from 'react';
+import { router } from 'expo-router';
+import { Share, View } from 'react-native';
+import { Text } from '../text';
+import { useStore } from '../store';
+import { Back, Button, Card, Field, Header, Notice, Screen, S } from '../ui';
+export default function Connection(){const {sync}=useStore(),[link,setLink]=useState(''),[error,setError]=useState('');return <Screen><Back onPress={()=>router.back()}/><Header eyebrow="YOUR SERVICE TEAM" title="Connected, wherever you are." sub="Partner updates arrive here, even when your service team is using another device."/><Notice text={sync.status}/><Card><Text style={S.body}>This shared presentation uses fictional service records. Your name and phone number stay on this device. Anyone with the session link can access its service history.</Text>{sync.session?<View><Button title="Share service session" style={{marginTop:20}} onPress={()=>{void Share.share({message:'https://smartwaste360-mobile.vercel.app/landing?session='+sync.session})}}/><Button title="Disconnect this device" variant="outline" style={{marginTop:12}} onPress={()=>{void sync.disconnect()}}/></View>:<View><Field label="Session link" value={link} onChangeText={setLink} placeholder="Paste the link from your service team"/><Button title="Connect to service team" style={{marginTop:20}} onPress={()=>{void sync.connect(link).then(ok=>setError(ok?'Connected. Your service history will appear shortly.':'Paste a valid session link.'))}}/></View>}{error?<Notice text={error}/>:null}</Card></Screen>}
