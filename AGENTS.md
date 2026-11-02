@@ -1,41 +1,17 @@
-This is an Expo/React Native mobile application. Prioritize mobile-first patterns, performance, and cross-platform compatibility.
+<!-- LOVABLE:BEGIN -->
+> [!IMPORTANT]
+> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
+> published git history — force pushing, or rebasing/amending/squashing commits
+> that are already pushed — as it rewrites history on Lovable's side and the
+> user will likely lose their project history.
+>
+> Commits you push to the connected branch sync back to Lovable and show up in
+> the editor, so keep the branch in a working state.
+<!-- LOVABLE:END -->
 
-## Expo has changed — do not trust your training data
+## Project rules
 
-Expo ships breaking changes every SDK release. APIs you remember are likely renamed, moved, or removed. Before writing any code that touches an Expo, EAS, or React Native API:
-
-1. Read the major version of the `expo` package in `package.json`.
-2. Fetch the matching versioned docs: `https://docs.expo.dev/versions/v<major>.0.0/`
-3. For anything else, fetch https://docs.expo.dev/llms.txt — an index of all Expo docs with corrections to common LLM misconceptions. Follow its links to the specific page you need; never answer from memory.
-
-## Commands
-
-Use `bunx` instead of `npx` if the project uses bun (`bun.lock` present).
-
-```bash
-npx expo install <package>  # ALWAYS use instead of npm/yarn/pnpm/bun add — resolves SDK-compatible versions
-npx expo start              # start the dev server
-npx expo lint               # lint
-npx tsc --noEmit            # typecheck
-npx expo-doctor             # diagnose dependency and config issues
-npx expo install --fix      # fix incompatible package versions
-```
-
-Run lint and typecheck before declaring any task done.
-
-## Navigation & Routing
-
-- Use **Expo Router** for all navigation. Routes live in `src/app/` — every file there is a screen, `_layout.tsx` files define navigators. Keep non-route code (components, hooks, utils) outside `src/app/`.
-- Import `Link`, `router`, and `useLocalSearchParams` from `expo-router`.
-- Docs: https://docs.expo.dev/router/introduction.md
-
-## Building with EAS
-
-Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
-Docs: https://docs.expo.dev/eas/index.md
-
-## Rules
-
-- If `ios/` and `android/` directories do not exist, they are generated (Continuous Native Generation). Never create or edit them by hand — configure native behavior in `app.json` and config plugins.
-- Expo Go only includes its bundled native modules. After adding a library with native code, the app needs a development build: `npx expo run:ios|android` locally, or `eas build --profile development`.
-- Prefer recommended Expo modules over third-party libraries, and check your available skills before adding dependencies. Docs: https://docs.expo.dev/versions/latest/index.md
+- This project is the LAWMA 360 customer app (web rebuild of the Expo app at github.com/ismailquadri/LAWMA-360-customer-app) and also hosts the cross-app message hub. Why: the Partner Hub and LAWMA workspace have no backend of their own.
+- Apps talk only by messages in the `app_messages` table: the customer app uses server functions in `src/lib/hub.functions.ts`; Partner Hub and LAWMA call `/api/public/messages` with an `x-app-key` header matched against `PARTNER_APP_KEY` / `LAWMA_APP_KEY`. The contract lives in `src/lib/hub-contract.ts` and `docs/app-messages.md`; change both together. Why: each app keeps its own data and stays independently deployable.
+- Residents sign in (email, Google, Lovable); each resident's state is one JSON row in `customer_accounts` loaded/saved via `src/lib/account.functions.ts`, and the hub server functions take the customer ID from that row, never from the browser. Why: accounts work across devices and residents can only see their own messages. Inbound messages are applied by the pure `applyInbound` in `src/lib/customer-model.ts`, which owns the pickup hold/settle/return money rules and is covered by `src/test/hub-rules.test.tsx`.
+- AI issue reports: `src/lib/report-ai.server.ts` calls the AI Gateway (Responses, structured output with the schema in `src/lib/report-ai.ts`) from the signed-in `draftReport` server function; the resident reviews/edits the draft before it is sent as `issue.reported`. Why: the resident stays in control of what is sent.
