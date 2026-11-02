@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Btn, Card, PageTitle, Phone, Pill } from "@/components/app";
 import { meta } from "@/lib/meta";
-import { draftReport } from "@/lib/report-ai.functions";
 import { REPORT_CATEGORIES, type ReportDraft } from "@/lib/report-ai";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -24,9 +23,7 @@ function ReportPage() {
   const run = async () => {
     setBusy(true); setErr(null);
     try {
-      const r = await draftReport({ data: { description: text, ...(premise ? { address: `${premise.address}, ${premise.area}` } : {}), ...(partner ? { partner: partner.name } : {}) } });
-      if (r.error || !r.draft) setErr(r.error ?? "Something went wrong.");
-      else setDraft(r.draft);
+      setDraft({ category: "Other", urgency: "medium", sendTo: ["partner"], title: "Resident service report", report: text.trim() });
     } catch { setErr("Couldn't reach the assistant. Check your connection."); }
     setBusy(false);
   };
@@ -35,14 +32,14 @@ function ReportPage() {
 
   if (sent) return (
     <Phone>
-      <PageTitle title="Report sent" sub={`Case ${sent} is with ${draft?.sendTo.map((t) => t === "lawma" ? "LAWMA" : "your partner").join(" and ")}.`} />
+      <PageTitle title="Demo report saved" sub={`Case ${sent} has been saved in this demo.`} />
       <Link to="/you"><Btn>View my cases</Btn></Link>
     </Phone>
   );
 
   return (
     <Phone>
-      <PageTitle title="Report an issue" sub="Tell us in your own words. AI will sort it and write it up clearly." />
+      <PageTitle title="Report an issue" sub="Tell us in your own words. Review a draft and save a sample report on this device." />
       <Card>
         <textarea value={text} onChange={(e) => setText(e.target.value)} rows={5} maxLength={2000}
           placeholder="e.g. Someone has been dumping refuse beside the canal at the end of our street for 3 days and it now blocks the drain."

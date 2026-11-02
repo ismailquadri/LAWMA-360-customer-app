@@ -1,14 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { AppName } from "./hub-contract";
-import { customerInbox, sendCustomerMessage } from "./hub.functions";
-import { getMyAccount, saveMyAccount } from "./account.functions";
-import { supabase } from "@/integrations/supabase/client";
 import {
   applyInbound, blankModel, money, newId, OPEN_PICKUP, partners, premises, stamp,
   type Model, type Notice,
 } from "./customer-model";
 
-type Link = "connecting" | "connected" | "offline";
+type Link = "demo" | "connecting" | "connected" | "offline";
 
 export type Auth = "loading" | "signedOut" | "signedIn";
 type Store = {
@@ -45,61 +42,17 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [email, setEmail] = useState("");
   const loadedFor = useRef("");
 
-  // One auth listener: load the resident's account from the server on sign-in.
+  // Public presentation mode: all resident changes stay on this device.
   useEffect(() => {
-    const load = async (uid: string | undefined, mail: string | undefined) => {
-      if (!uid) { loadedFor.current = ""; setReady(false); setModel(blankModel("")); setEmail(""); setAuth("signedOut"); return; }
-      if (loadedFor.current === uid) return;
-      loadedFor.current = uid;
-      setEmail(mail ?? "");
-      setAuth("signedIn");
-      try {
-        const acc = await getMyAccount();
-        const saved = (acc.state ?? {}) as Partial<Model>;
-        setModel({ ...blankModel(acc.customerId), ...saved, customerId: acc.customerId });
-        setReady(true);
-      } catch { loadedFor.current = ""; setLink("offline"); }
-    };
-    supabase.auth.getSession().then(({ data }) => load(data.session?.user.id, data.session?.user.email));
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
-      void load(session?.user.id, session?.user.email);
-    });
-    return () => sub.subscription.unsubscribe();
+    const demo = { ...blankModel("CUS-DEMO-LOCAL"), name: "Adaeze", phone: "0803 000 0000", premiseId: "HOME-018", partnerId: "PAR-001", balance: 7500,
+      bins: [{ id: "BIN-DEMO-01", size: 240, state: "Active" as const }] };
+    try { const saved = localStorage.getItem("lawma-customer-demo-v1"); setModel(saved ? { ...demo, ...JSON.parse(saved) } : demo); } catch { setModel(demo); }
+    setAuth("signedIn"); setEmail("Demo resident"); setReady(true); setLink("demo");
   }, []);
-
-  // Save the account to the server shortly after each change.
   useEffect(() => {
-    if (!ready || !model.customerId) return;
-    const t = setTimeout(() => { saveMyAccount({ data: { state: model as unknown as Record<string, unknown> } }).catch(() => setLink("offline")); }, 700);
-    return () => clearTimeout(t);
+    if (ready) { try { localStorage.setItem("lawma-customer-demo-v1", JSON.stringify(model)); } catch { /* Storage may be unavailable in private browsing. */ } }
   }, [model, ready]);
-
-  // Pull new messages from the Partner Hub and LAWMA every few seconds.
-  useEffect(() => {
-    if (!ready || !model.customerId) return;
-    let active = true;
-    const tick = async () => {
-      try {
-        const { messages } = await customerInbox({ data: latest.current.cursor ? { since: latest.current.cursor } : {} });
-        if (!active) return;
-        if (messages.length) setModel((s) => messages.reduce(applyInbound, s));
-        setLink("connected");
-      } catch { if (active) setLink("offline"); }
-    };
-    void tick();
-    const t = setInterval(tick, 4000);
-    return () => { active = false; clearInterval(t); };
-  }, [ready, model.customerId]);
-
-  const send = useCallback((to: AppName[], type: string, payload: Record<string, unknown>, ref?: string) => {
-    const m = latest.current;
-    const premise = premises.find((p) => p.id === m.premiseId);
-    const customer = { name: m.name, phone: m.phone, address: premise?.address, area: premise?.area, premiseId: m.premiseId, partnerId: m.partnerId };
-    sendCustomerMessage({ data: { to, type, ...(ref ? { ref } : {}), payload: { ...payload, customer } } })
-      .then(() => setLink("connected"))
-      .catch(() => setLink("offline"));
-  }, []);
+  const send = useCallback((_to: AppName[], _type: string, _payload: Record<string, unknown>, _ref?: string) => { setLink("demo"); }, []);
 
   const notice = (s: Model, text: string): Notice[] => [{ id: newId("N"), text, time: stamp(), from: "app" as const }, ...s.notices].slice(0, 30);
 
@@ -108,7 +61,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const partner = partners.find((p) => p.id === model.partnerId);
     return {
       auth, email, model, ready, link, premise, partner,
-      async signOut() { await supabase.auth.signOut(); },
+      async signOut() { setModel(blankModel("CUS-DEMO-LOCAL")); },
       start(name, phone) {
         setModel((s) => ({ ...s, name: name.trim(), phone: phone.trim() }));
         setTimeout(() => send(["lawma"], "customer.registered", {}), 0);

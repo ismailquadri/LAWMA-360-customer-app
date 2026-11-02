@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
 import { Btn, Card, Empty, LinkStatus, PageTitle, Phone, Pill } from "@/components/app";
 import { partners } from "@/lib/customer-model";
@@ -35,7 +34,7 @@ function You() {
       <p className="mt-2 break-all text-xs text-muted-foreground">Customer ID: {model.customerId}</p>
 
       <Card className="mt-5">
-        <Link to="/report" className="mb-4 flex items-center justify-between rounded-2xl bg-pale p-3 text-sm font-semibold text-primary">Describe it in your own words — AI drafts the report <span>›</span></Link>
+        <Link to="/report" className="mb-4 flex items-center justify-between rounded-2xl bg-pale p-3 text-sm font-semibold text-primary">Describe a problem with your collection <span>›</span></Link>
         <p className="font-semibold">Quick help</p>
         <p className="mt-1 text-sm text-muted-foreground">Goes to {type.to.map((t) => t === "lawma" ? "LAWMA" : "your partner").join(" and ")}.</p>
         <div className="mt-3 flex flex-wrap gap-2">
@@ -73,9 +72,7 @@ function You() {
         )}
       </Card>
 
-      <Btn className="mt-6" onClick={async () => { const { error } = await supabase.auth.registerPasskey(); alert(error ? "Couldn't set up Face ID on this device." : "Face ID is on. Next time, sign in with one tap."); }}>Turn on Face ID / passkey</Btn>
-      <Btn tone="ghost" className="mt-3" onClick={() => void signOut()}>Sign out of {email}</Btn>
-      <button onClick={() => { if (confirm("Start a fresh customer journey? This clears your account data.")) reset(); }} className="mt-6 w-full text-center text-sm text-muted-foreground underline">Start a fresh customer journey</button>
+      <button onClick={() => { if (confirm("Start a fresh customer journey? This resets the demo on this device.")) reset(); }} className="mt-6 w-full text-center text-sm text-muted-foreground underline">Start a fresh customer journey</button>
     </Phone>
   );
 }

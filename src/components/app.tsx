@@ -19,14 +19,14 @@ export function Phone({ children, nav = true }: { children: ReactNode; nav?: boo
   if (nav && path !== "/" && auth === "signedOut") return <Navigate to="/" />;
   if (nav && path !== "/" && !ready) return <div className="mx-auto min-h-screen max-w-[430px] bg-background" />;
   return (
-    <div className="mx-auto flex min-h-screen max-w-[430px] flex-col bg-background shadow-xl">
+    <div className="app-phone mx-auto flex min-h-screen max-w-[430px] flex-col bg-background shadow-xl">
       <main className="ios-stagger flex-1 px-5 pb-28 pt-6" style={{ viewTransitionName: "page" }}>{children}</main>
       {nav && (
-        <nav className="fixed bottom-0 left-1/2 z-20 flex w-full max-w-[430px] -translate-x-1/2 justify-around border-t bg-card/95 px-2 pb-4 pt-2 backdrop-blur">
+        <nav className="app-tabbar fixed bottom-0 left-1/2 z-20 flex w-full max-w-[430px] -translate-x-1/2 justify-around border-t bg-card/95 px-2 pb-4 pt-2 backdrop-blur">
           {tabs.map((t) => {
             const on = t.to === "/" ? path === "/" : path.startsWith(t.to);
             return (
-              <Link key={t.to} to={t.to} className={cn("flex min-w-14 flex-col items-center gap-1 rounded-xl py-1 text-[11px] font-medium", on ? "text-primary" : "text-muted-foreground")}>
+              <Link key={t.to} to={t.to} aria-current={on ? "page" : undefined} className={cn("flex min-h-12 min-w-14 flex-col items-center gap-1 rounded-xl py-1 text-[11px] font-medium", on ? "text-primary" : "text-muted-foreground")}>
                 <t.icon className="size-5" strokeWidth={on ? 2.4 : 1.8} />
                 {t.label}
               </Link>
@@ -40,7 +40,7 @@ export function Phone({ children, nav = true }: { children: ReactNode; nav?: boo
 
 export function LinkStatus() {
   const { link } = useStore();
-  const label = link === "connected" ? "Connected to partner & LAWMA" : link === "offline" ? "Offline — retrying" : "Connecting…";
+  const label = link === "demo" ? "Demo · saved on this device" : link === "connected" ? "Connected to partner & LAWMA" : link === "offline" ? "Offline — retrying" : "Connecting…";
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-[11px] font-medium text-muted-foreground ring-1 ring-border">
       <span className={cn("size-1.5 rounded-full", link === "connected" ? "bg-success" : link === "offline" ? "bg-destructive" : "bg-warning")} />
@@ -62,7 +62,7 @@ export function Brand() {
 export function PageTitle({ title, sub }: { title: string; sub?: string | undefined }) {
   return (
     <header className="mb-5">
-      <h1 className="text-[27px] font-bold leading-tight tracking-tight">{title}</h1>
+      <h1 className="text-[34px] font-bold leading-tight tracking-tight">{title}</h1>
       {sub && <p className="mt-1 text-sm text-muted-foreground">{sub}</p>}
     </header>
   );
@@ -74,7 +74,7 @@ export function Btn({ tone = "primary", className, ...props }: BtnProps) {
     <button
       {...props}
       className={cn(
-        "inline-flex h-11 w-full items-center justify-center gap-2 rounded-[10px] px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl px-5 text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
         tone === "primary" && "bg-primary text-primary-foreground",
         tone === "ember" && "bg-ember text-ember-foreground",
         tone === "light" && "bg-card text-primary",
@@ -86,7 +86,7 @@ export function Btn({ tone = "primary", className, ...props }: BtnProps) {
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("ios-press rounded-3xl border bg-card p-4", className)}>{children}</div>;
+  return <div className={cn("ios-card rounded-3xl bg-card p-5", className)}>{children}</div>;
 }
 
 export function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {

@@ -86,7 +86,7 @@ function Steps({ n, title, sub }: { n: number; title: string; sub?: string | und
       <div className="mt-4 grid grid-cols-3 gap-1.5">
         {[1, 2, 3].map((k) => <span key={k} className={cn("h-1.5 rounded-full", k <= n ? "bg-ember" : "bg-border")} />)}
       </div>
-      <h1 className="mt-6 text-[27px] font-bold leading-tight tracking-tight">{title}</h1>
+      <h1 className="mt-6 text-[34px] font-bold leading-tight tracking-tight">{title}</h1>
       {sub && <p className="mt-1 text-sm text-muted-foreground">{sub}</p>}
     </div>
   );
@@ -168,8 +168,8 @@ function Home() {
         <div><p className="eyebrow">My residence</p><p className="mt-1 font-semibold">{premise?.address}</p></div>
         <LinkStatus />
       </div>
-      <h1 className="mt-6 text-[27px] font-bold tracking-tight">Hello, {model.name.split(" ")[0]}.</h1>
-      <div className={cn("relative mt-4 aspect-[4/5] overflow-hidden rounded-[28px]", forest ? "bg-primary" : "bg-ember")}>
+      <h1 className="mt-6 text-[34px] font-bold tracking-tight">Hello, {model.name.split(" ")[0]}.</h1>
+      <div className={cn("relative mt-4 aspect-[6/5] overflow-hidden rounded-[28px]", forest ? "bg-primary" : "bg-ember")}>
         <img src={active ? collectionImg : deliveryImg} alt="" className="absolute inset-0 size-full object-cover" />
         <div className={cn("absolute inset-0", forest ? "hero-wash-forest" : "hero-wash-ember")} />
         <div className="absolute inset-x-0 bottom-0 p-6 text-primary-foreground">
@@ -180,12 +180,12 @@ function Home() {
         </div>
       </div>
       <Link to="/wallet" className="pass mt-4 block rounded-3xl p-5 text-primary-foreground">
-        <p className="text-[11px] uppercase tracking-widest opacity-80">Wallet balance</p>
+        <p className="text-[11px] uppercase tracking-widest opacity-80">Demo wallet balance</p>
         <p className="mt-1 text-3xl font-bold">{money(model.balance)}</p>
         {model.reserved > 0 && <p className="mt-1 text-sm opacity-80">{money(model.reserved)} held for a pickup</p>}
       </Link>
-      <Link to="/report" className="mt-4 flex items-center justify-between rounded-3xl border bg-card p-4">
-        <div><p className="font-semibold">Something not right?</p><p className="text-sm text-muted-foreground">Describe it — AI writes the report for you.</p></div>
+      <Link to="/report" className="ios-card mt-5 flex items-center justify-between gap-4 rounded-3xl bg-card p-5">
+        <div><p className="font-semibold">Something not right?</p><p className="text-sm text-muted-foreground">Describe a problem with your collection.</p></div>
         <span className="text-sm font-semibold text-ember">Report ›</span>
       </Link>
       {model.notices.length > 0 && (
