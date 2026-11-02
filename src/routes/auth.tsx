@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { meta } from "@/lib/meta";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -65,7 +64,7 @@ function AuthPage() {
 
   const social = async (provider: "google" | "apple") => {
     setErr(null); setBusy(provider);
-    const r = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin });
+    const r = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: window.location.origin } });
     if (r.error) { setErr(r.error.message ?? "Sign-in failed"); setBusy(null); }
   };
 

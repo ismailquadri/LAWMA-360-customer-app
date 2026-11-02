@@ -13,8 +13,8 @@ export const draftReport = createServerFn({ method: "POST" })
     }).parse(d),
   )
   .handler(async ({ data }) => {
-    const key = process.env["LOVABLE_API_KEY"];
-    if (!key) return { error: "The report assistant isn't set up yet." as string, draft: null };
+    const key = process.env["OPENAI_API_KEY"];
+    if (!key || !process.env["OPENAI_MODEL"]) return { error: "The report assistant isn't set up yet." as string, draft: null };
     try {
       const draft = await draftWithAI(key, data.description, { address: data.address, partner: data.partner });
       return { error: null, draft };

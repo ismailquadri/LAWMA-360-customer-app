@@ -3,8 +3,7 @@
 The customer app hosts a small message hub. The Partner Hub and the LAWMA
 workspace talk to it over HTTP.
 
-Base URL (preview): `https://project--051a70f6-fb79-43cd-9deb-6c14f8075c4d-dev.lovable.app`
-Base URL (published): `https://project--051a70f6-fb79-43cd-9deb-6c14f8075c4d.lovable.app`
+Base URL: `https://smartwaste360-mobile.vercel.app`
 
 Every request sends header `x-app-key: <PARTNER_APP_KEY or LAWMA_APP_KEY>`.
 

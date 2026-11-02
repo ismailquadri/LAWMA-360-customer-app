@@ -2,8 +2,6 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { NoObjectGeneratedError, Output, streamText } from "ai";
 import { REPORT_CATEGORIES, reportDraft, type ReportDraft } from "./report-ai";
 
-const MODEL = "openai/gpt-6-astra";
-const GATEWAY = "https://ai.gateway.lovable.dev/v1";
 
 const instructions = `You help Lagos residents report waste problems to LAWMA (the Lagos State Waste Management Authority) or to their licensed private collection partner.
 Read the resident's description and:
@@ -14,12 +12,11 @@ Read the resident's description and:
 
 export async function draftWithAI(apiKey: string, description: string, context: { address?: string | undefined; partner?: string | undefined }): Promise<ReportDraft> {
   const provider = createOpenAI({
-    baseURL: GATEWAY,
+    baseURL: process.env["OPENAI_BASE_URL"] || "https://api.openai.com/v1",
     apiKey,
-    headers: { "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
   });
   const result = streamText({
-    model: provider.responses(MODEL),
+    model: provider.responses(process.env["OPENAI_MODEL"]!),
     instructions,
     messages: [{
       role: "user",

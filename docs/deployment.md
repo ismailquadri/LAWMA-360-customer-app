@@ -23,10 +23,10 @@ Vercel production environment:
 
 - `SUPABASE_SERVICE_ROLE_KEY`: needed by message-hub database operations.
 - `PARTNER_APP_KEY`, `LAWMA_APP_KEY`: needed for incoming cross-app messages.
-- `LOVABLE_API_KEY`: needed for AI report drafts.
+- `OPENAI_API_KEY` and `OPENAI_MODEL`: needed for AI report drafts.
 
 Until those existing backend credentials are supplied, the hub and AI features
-are not operational. Email confirmation/reset redirect allowlists and Lovable
+are not operational. Email confirmation/reset redirect allowlists and Supabase
 OAuth support for the production domain require verification in the backend
 owner's console. Signed-in account persistence has not been verified.
 Do not substitute fabricated credentials or demo authentication.
@@ -40,3 +40,9 @@ excluded from Git. Only `.env.example` is committed.
 Production build, TypeScript check and seven existing tests pass.
 Export lint has 540 errors (539 formatting errors) and eight warnings;
 these are outside the deployment-only change scope.
+
+The app uses standard Vite, TanStack Start and Nitro without editor SDKs.
+AI drafts use a configurable OpenAI-compatible Responses API; without a key
+and model, the existing manual-report fallback remains available.
+The current database is still externally managed. Moving its data requires
+a database export/access and a separately provisioned destination project.
