@@ -32,27 +32,17 @@ function WalletPage() {
 
   return (
     <Phone>
-      <div className="-mx-5 -mt-6 bg-gradient-to-b from-primary via-primary/80 to-background px-5 pb-6 pt-6 text-primary-foreground">
-        <div className="flex items-center justify-between text-sm">
-          <span className="font-medium opacity-90">Wallet</span>
-          <span className="max-w-[180px] truncate opacity-70">{email}</span>
-        </div>
-        <div className="mt-8 text-center">
-          <p className="text-sm opacity-80">Available balance</p>
-          <p className="mt-1 text-[46px] font-bold leading-none tracking-tight">{whole}{kobo !== undefined && <span className="opacity-50">.{kobo}</span>}</p>
-          <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-primary-foreground/15 px-3 py-1 text-xs backdrop-blur">
-            <span>⬆</span>{money(addedThisMonth)} added · {money(model.reserved)} held
-          </p>
-        </div>
-      </div>
-
-      <div className="rounded-[22px] border bg-card p-1.5 shadow-[0_12px_40px_-16px_color-mix(in_oklab,var(--primary)_35%,transparent)]">
-        <div className="flex items-center gap-2 px-3 pt-2.5 font-semibold"><span className="text-ember">●</span>Top up before your next pickup</div>
-        <div className="mt-2 rounded-2xl bg-muted/60 p-3 text-sm text-muted-foreground">
-          Pickups hold money from your wallet and only charge you once the partner completes the job. Unused holds come straight back.
-          <button onClick={() => setSheet("amount")} className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-xl border bg-card text-sm font-medium text-foreground shadow-sm">Add money <span className="text-primary">→</span></button>
-        </div>
-      </div>
+      <header className="mb-5"><p className="eyebrow">Your money, at a glance</p><h1 className="mt-1 text-[34px] font-bold tracking-tight">Wallet</h1></header>
+      <section className="wallet-balance" aria-label="Wallet summary">
+        <div className="flex items-center justify-between"><p className="text-sm text-white/80">Available balance</p><span className="text-xs text-white/70">Demo wallet</span></div>
+        <p className="mt-3 text-[44px] font-semibold leading-none tracking-tight tabular-nums">{whole}{kobo !== undefined && <span className="text-2xl text-white/60">.{kobo}</span>}</p>
+        <div className="wallet-summary"><div><span className="text-xs text-white/70">Money added</span><p>{money(addedThisMonth)}</p></div><div className="text-right"><span className="text-xs text-white/70">Held for pickups</span><p>{money(model.reserved)}</p></div></div>
+      </section>
+      <section className="wallet-topup">
+        <h2 className="text-[17px] font-semibold">Ready for your next collection</h2>
+        <p className="mt-2 text-sm text-muted-foreground">Keep your demo wallet topped up to request a pickup.</p>
+        <button onClick={() => setSheet("amount")} className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-primary-foreground">Add money <span aria-hidden="true">＋</span></button>
+      </section>
 
       <div className="mt-6 flex gap-2">
         {([["all", "All"], ["in", "Money in"], ["out", "Money out"]] as const).map(([k, l]) => (
@@ -60,7 +50,7 @@ function WalletPage() {
         ))}
       </div>
 
-      <div className="mt-3">
+      <div className="ios-card mt-3 divide-y px-4">
         {entries.length === 0 ? (
           <p className="py-8 text-center text-sm text-muted-foreground">No transactions here yet.</p>
         ) : entries.map((e) => (

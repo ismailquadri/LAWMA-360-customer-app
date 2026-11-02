@@ -72,6 +72,7 @@ function You() {
         )}
       </Card>
 
+      <Btn tone="ghost" className="mt-5" onClick={() => void signOut()}>Sign out of demo</Btn>
       <button onClick={() => { if (confirm("Start a fresh customer journey? This resets the demo on this device.")) reset(); }} className="mt-6 w-full text-center text-sm text-muted-foreground underline">Start a fresh customer journey</button>
     </Phone>
   );

@@ -9,6 +9,7 @@ type Link = "demo" | "connecting" | "connected" | "offline";
 
 export type Auth = "loading" | "signedOut" | "signedIn";
 type Store = {
+  demoSignIn: (email: string, signup: boolean) => void;
   auth: Auth;
   email: string;
   signOut: () => Promise<void>;
@@ -47,7 +48,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const demo = { ...blankModel("CUS-DEMO-LOCAL"), name: "Adaeze", phone: "0803 000 0000", premiseId: "HOME-018", partnerId: "PAR-001", balance: 7500,
       bins: [{ id: "BIN-DEMO-01", size: 240, state: "Active" as const }] };
     try { const saved = localStorage.getItem("lawma-customer-demo-v1"); setModel(saved ? { ...demo, ...JSON.parse(saved) } : demo); } catch { setModel(demo); }
-    setAuth("signedIn"); setEmail("Demo resident"); setReady(true); setLink("demo");
+    setAuth("signedOut"); setEmail("Demo resident"); setReady(true); setLink("demo");
   }, []);
   useEffect(() => {
     if (ready) { try { localStorage.setItem("lawma-customer-demo-v1", JSON.stringify(model)); } catch { /* Storage may be unavailable in private browsing. */ } }
@@ -61,7 +62,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const partner = partners.find((p) => p.id === model.partnerId);
     return {
       auth, email, model, ready, link, premise, partner,
-      async signOut() { setModel(blankModel("CUS-DEMO-LOCAL")); },
+      demoSignIn(mail, signup) {
+        setEmail(mail.trim() || "Demo resident");
+        if (signup) setModel({ ...blankModel("CUS-DEMO-LOCAL"), balance: 7500 });
+        else setModel(s => ({ ...s, name: s.name || "Adaeze", premiseId: s.premiseId || "HOME-018", partnerId: s.partnerId || "PAR-001" }));
+        setAuth("signedIn");
+      },
+      async signOut() { setAuth("signedOut"); },
       start(name, phone) {
         setModel((s) => ({ ...s, name: name.trim(), phone: phone.trim() }));
         setTimeout(() => send(["lawma"], "customer.registered", {}), 0);
