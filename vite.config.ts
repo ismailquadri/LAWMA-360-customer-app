@@ -13,4 +13,7 @@ export default defineConfig({
     nitro({ preset: "vercel" }),
     react(),
   ],
+  build: {
+    sourcemap: false,
+  },
 });

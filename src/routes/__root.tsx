@@ -12,6 +12,7 @@ import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { StoreProvider } from "../lib/store";
+import { EvaluationAccessWall } from "../components/legal/EvaluationAccessWall";
 
 function NotFoundComponent() {
   return (
@@ -84,9 +85,11 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <StoreProvider>
-        <Outlet />
-      </StoreProvider>
+      <EvaluationAccessWall>
+        <StoreProvider>
+          <Outlet />
+        </StoreProvider>
+      </EvaluationAccessWall>
     </QueryClientProvider>
   );
 }
