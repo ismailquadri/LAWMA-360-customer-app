@@ -1,9 +1,16 @@
 import { Link, Navigate, useRouterState } from "@tanstack/react-router";
 import { Activity, Home, Package, User, Wallet } from "lucide-react";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { InputHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
 import mark from "@/assets/smartwaste-icon.png";
+import {
+  IosBadge,
+  IosButton,
+  IosEmpty,
+  IosField,
+  type IosButtonTone,
+} from "./ios";
 
 const tabs = [
   { to: "/", label: "Home", icon: Home },
@@ -19,16 +26,29 @@ export function Phone({ children, nav = true }: { children: ReactNode; nav?: boo
   if (nav && path !== "/" && !ready) return <div className="mx-auto min-h-screen max-w-[430px] bg-background" />;
   if (nav && path !== "/" && !isOnboarded) return <Navigate to="/" />;
   return (
-    <div className="app-phone mx-auto flex min-h-screen max-w-[430px] flex-col bg-background shadow-xl">
-      <main className="ios-stagger flex-1 px-5 pb-28 pt-6" style={{ viewTransitionName: "page" }}>{children}</main>
+    <div className="app-phone mx-auto flex min-h-screen max-w-[430px] flex-col bg-background">
+      <main className="ios-stagger flex-1 px-4 pb-28 pt-5" style={{ viewTransitionName: "page" }}>
+        {children}
+      </main>
       {nav && (
-        <nav className="app-tabbar fixed bottom-0 left-1/2 z-20 flex w-full max-w-[430px] -translate-x-1/2 justify-around border-t bg-card/95 px-2 pb-4 pt-2 backdrop-blur">
+        <nav
+          aria-label="Primary tabs"
+          className="app-tabbar fixed bottom-0 left-1/2 z-20 grid w-full max-w-[430px] -translate-x-1/2 grid-cols-5 px-1 pt-1.5 pb-3"
+        >
           {tabs.map((t) => {
             const on = t.to === "/" ? path === "/" : path.startsWith(t.to);
             return (
-              <Link key={t.to} to={t.to} aria-current={on ? "page" : undefined} className={cn("flex min-h-12 min-w-14 flex-col items-center gap-1 rounded-xl py-1 text-[11px] font-medium", on ? "text-primary" : "text-muted-foreground")}>
-                <t.icon className="size-5" strokeWidth={on ? 2.4 : 1.8} />
-                {t.label}
+              <Link
+                key={t.to}
+                to={t.to}
+                aria-current={on ? "page" : undefined}
+                className={cn(
+                  "flex min-h-[46px] flex-col items-center justify-center gap-0.5 rounded-[10px] py-1 text-[10.5px] tracking-[-0.01em] transition-colors",
+                  on ? "font-semibold text-primary" : "font-medium text-muted-foreground hover:text-foreground",
+                )}
+              >
+                <t.icon className="size-[22px]" strokeWidth={on ? 2.25 : 1.7} aria-hidden="true" />
+                <span>{t.label}</span>
               </Link>
             );
           })}
@@ -40,73 +60,84 @@ export function Phone({ children, nav = true }: { children: ReactNode; nav?: boo
 
 export function LinkStatus() {
   const { link } = useStore();
-  const label = link === "demo" ? "Demo · saved on this device" : link === "connected" ? "Connected to partner & LAWMA" : link === "offline" ? "Offline — retrying" : "Connecting…";
+  const label =
+    link === "demo"
+      ? "On-device"
+      : link === "connected"
+        ? "Connected"
+        : link === "offline"
+          ? "Offline"
+          : "Connecting…";
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-[11px] font-medium text-muted-foreground ring-1 ring-border">
-      <span className={cn("size-1.5 rounded-full", link === "connected" ? "bg-success" : link === "offline" ? "bg-destructive" : "bg-warning")} />
+    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-card px-2.5 py-1 text-[12px] font-medium text-muted-foreground ring-1 ring-black/[0.07]">
+      <span
+        aria-hidden="true"
+        className={cn(
+          "size-1.5 rounded-full",
+          link === "connected" || link === "demo" ? "bg-[#248a3d]" : link === "offline" ? "bg-destructive" : "bg-warning",
+        )}
+      />
       {label}
     </span>
   );
 }
 
 export const brandMark = mark;
+
 export function Brand() {
   return (
     <div className="flex items-center gap-2">
-      <img src={mark} alt="" className="size-7" />
-      <span className="text-sm font-semibold tracking-tight">SmartWaste360</span>
+      <img src={mark} alt="" className="size-7 rounded-[7px]" />
+      <span className="text-[15px] font-semibold tracking-[-0.02em]">SmartWaste360</span>
     </div>
   );
 }
 
 export function PageTitle({ title, sub }: { title: string; sub?: string | undefined }) {
   return (
-    <header className="mb-5">
-      <h1 className="text-[34px] font-bold leading-tight tracking-tight">{title}</h1>
-      {sub && <p className="mt-1 text-sm text-muted-foreground">{sub}</p>}
+    <header className="mb-5 px-0.5">
+      <h1 className="text-[34px] font-bold leading-[1.12] tracking-[-0.025em] text-foreground">{title}</h1>
+      {sub && <p className="mt-1 text-[15px] leading-[20px] text-muted-foreground">{sub}</p>}
     </header>
   );
 }
 
-type BtnProps = ButtonHTMLAttributes<HTMLButtonElement> & { tone?: "primary" | "ember" | "light" | "ghost" };
-export function Btn({ tone = "primary", className, ...props }: BtnProps) {
+export function Btn({
+  tone = "primary",
+  type = "button",
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { tone?: IosButtonTone | undefined }) {
+  return <IosButton tone={tone} type={type} {...props} />;
+}
+
+export function Card({ className, children }: { className?: string | undefined; children: ReactNode }) {
+  return <div className={cn("ios-card p-4", className)}>{children}</div>;
+}
+
+export function Field(props: InputHTMLAttributes<HTMLInputElement> & { label: string; hint?: string | undefined }) {
   return (
-    <button
-      {...props}
-      className={cn(
-        "inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl px-5 text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
-        tone === "primary" && "bg-primary text-primary-foreground",
-        tone === "ember" && "bg-ember text-ember-foreground",
-        tone === "light" && "bg-card text-primary",
-        tone === "ghost" && "border border-input bg-card text-foreground hover:bg-muted",
-        className,
-      )}
-    />
+    <div className="ios-group">
+      <IosField {...props} />
+    </div>
   );
 }
 
-export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("ios-card rounded-3xl bg-card p-5", className)}>{children}</div>;
-}
-
-export function Field(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
-  const { label, ...rest } = props;
-  return (
-    <label className="block">
-      <span className="text-sm font-medium leading-none">{label}</span>
-      <input {...rest} className="mt-2 flex h-11 w-full rounded-[10px] border border-input bg-card px-3 text-base transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring read-only:bg-muted/50" />
-    </label>
-  );
-}
-
-const toneFor: Record<string, string> = {
-  Completed: "bg-pale text-accent-foreground", Active: "bg-pale text-accent-foreground", Resolved: "bg-pale text-accent-foreground",
-  Declined: "bg-destructive/10 text-destructive", Cancelled: "bg-muted text-muted-foreground",
-};
 export function Pill({ children }: { children: string }) {
-  return <span className={cn("rounded-full px-2.5 py-1 text-[11px] font-semibold", toneFor[children] ?? "bg-ember/15 text-ember")}>{children}</span>;
+  return <IosBadge>{children}</IosBadge>;
 }
 
-export function Empty({ children }: { children: ReactNode }) {
-  return <p className="rounded-3xl border border-dashed p-6 text-center text-sm text-muted-foreground">{children}</p>;
+export function Empty({
+  icon,
+  title,
+  children,
+}: {
+  icon?: ReactNode | undefined;
+  title?: string | undefined;
+  children: ReactNode;
+}) {
+  return (
+    <IosEmpty icon={icon} title={title}>
+      {children}
+    </IosEmpty>
+  );
 }

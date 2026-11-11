@@ -27,7 +27,7 @@ export function MockupFrame({ children }: { children: ReactNode }) {
             aria-hidden="true"
             className={cn(
               "pointer-events-none absolute inset-x-0 top-0 z-40 hidden h-[48px] items-center justify-between px-7 pt-1 text-[13px] font-semibold tracking-tight transition-colors duration-300 min-[480px]:flex",
-              darkStatus ? "bg-transparent text-white" : "bg-[#f2f3f7]/85 text-foreground backdrop-blur-md",
+              darkStatus ? "bg-transparent text-white" : "bg-[#f2f2f7]/85 text-foreground backdrop-blur-md",
             )}
           >
             <span className="w-12 tabular-nums">9:41</span>

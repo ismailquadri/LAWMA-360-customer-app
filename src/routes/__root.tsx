@@ -17,13 +17,13 @@ import { MockupFrame } from "../components/MockupFrame";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">The page you're looking for doesn't exist or has been moved.</p>
-        <div className="mt-6">
-          <Link to="/" className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Go home</Link>
+    <div className="flex min-h-screen items-center justify-center bg-background px-5">
+      <div className="ios-card w-full max-w-[340px] p-6 text-center">
+        <p className="text-[48px] font-bold leading-none tracking-tight text-primary">404</p>
+        <h1 className="mt-3 text-[20px] font-bold tracking-tight text-foreground">Page not found</h1>
+        <p className="mt-1.5 text-[14px] text-muted-foreground">The screen you’re looking for doesn’t exist or has been moved.</p>
+        <div className="mt-5">
+          <Link to="/" className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[12px] bg-primary px-4 text-[16px] font-semibold text-primary-foreground">Go home</Link>
         </div>
       </div>
     </div>
@@ -34,13 +34,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">This page didn't load</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Something went wrong on our end. You can try refreshing or head back home.</p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button onClick={() => { router.invalidate(); reset(); }} className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Try again</button>
-          <a href="/" className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground">Go home</a>
+    <div className="flex min-h-screen items-center justify-center bg-background px-5">
+      <div className="ios-card w-full max-w-[340px] p-6 text-center">
+        <h1 className="text-[20px] font-bold tracking-tight text-foreground">This screen didn’t load</h1>
+        <p className="mt-1.5 text-[14px] text-muted-foreground">Something went wrong. You can try again or head back home.</p>
+        <div className="mt-5 flex flex-col gap-2">
+          <button type="button" onClick={() => { router.invalidate(); reset(); }} className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[12px] bg-primary px-4 text-[16px] font-semibold text-primary-foreground">Try again</button>
+          <a href="/" className="inline-flex min-h-[46px] w-full items-center justify-center rounded-[12px] bg-[#767680]/[0.12] px-4 text-[16px] font-semibold text-foreground">Go home</a>
         </div>
       </div>
     </div>

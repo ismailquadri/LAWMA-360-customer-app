@@ -1,14 +1,28 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { Btn, Card, Empty, LinkStatus, PageTitle, Phone, Pill } from "@/components/app";
+import { createFileRoute } from "@tanstack/react-router";
+import {
+  AlertTriangle,
+  Building2,
+  Headphones,
+  MessageSquarePlus,
+  RotateCcw,
+} from "lucide-react";
+import { useId, useState } from "react";
+import { LinkStatus, PageTitle, Phone } from "@/components/app";
+import {
+  IosActionSheet,
+  IosBadge,
+  IosButton,
+  IosEmpty,
+  IosRow,
+  IosSection,
+} from "@/components/ios";
 import { partners } from "@/lib/customer-model";
 import type { AppName } from "@/lib/hub-contract";
 import { meta } from "@/lib/meta";
 import { useStore } from "@/lib/store";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/you")({
-  head: () => meta("You", "Your account, support cases with LAWMA and your collection partner."),
+  head: () => meta("You", "Your resident profile, support cases and collection partner."),
   component: You,
 });
 
@@ -26,53 +40,213 @@ function You() {
   const [sent, setSent] = useState("");
   const [change, setChange] = useState("");
   const [changeErr, setChangeErr] = useState<string | null>(null);
+  const [confirmReset, setConfirmReset] = useState(false);
+
+  const noteId = useId();
+  const selectId = useId();
   const pending = partners.find((p) => p.id === model.pendingPartnerId);
+
+  const initials = model.name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((n) => n[0]?.toUpperCase() ?? "")
+    .join("") || "R";
+
   return (
     <Phone>
-      <PageTitle title={model.name} sub={`${premise?.address}, ${premise?.area} · ${model.phone}`} />
-      <LinkStatus />
-      <p className="mt-2 break-all text-xs text-muted-foreground">Customer ID: {model.customerId}</p>
+      <PageTitle title="You" />
 
-      <Card className="mt-5">
-        <Link to="/report" className="mb-4 flex items-center justify-between rounded-2xl bg-pale p-3 text-sm font-semibold text-primary">Describe a problem with your collection <span>›</span></Link>
-        <p className="font-semibold">Quick help</p>
-        <p className="mt-1 text-sm text-muted-foreground">Goes to {type.to.map((t) => t === "lawma" ? "LAWMA" : "your partner").join(" and ")}.</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {types.map((t) => <button key={t.label} onClick={() => setType(t)} className={cn("rounded-full border px-3 py-1.5 text-xs font-semibold", type.label === t.label && "border-primary bg-pale text-primary")}>{t.label}</button>)}
-        </div>
-        <textarea value={detail} onChange={(e) => setDetail(e.target.value)} rows={3} placeholder="Tell us what happened" className="mt-3 w-full rounded-2xl border bg-card p-3 text-sm outline-none focus:ring-2 focus:ring-ring" />
-        <Btn className="mt-3" disabled={detail.trim().length < 3} onClick={() => { setSent(report(type.label, detail.trim(), type.to)); setDetail(""); }}>Send</Btn>
-        {sent && <p className="mt-2 text-sm text-success">Case {sent} sent.</p>}
-      </Card>
+      <div className="space-y-6">
+        {/* Apple Account Profile Card */}
+        <section className="ios-group p-4" aria-label="Resident profile">
+          <div className="flex items-center gap-3.5">
+            <div
+              aria-hidden="true"
+              className="grid size-14 shrink-0 place-items-center rounded-full bg-primary text-[19px] font-bold text-white shadow-sm"
+            >
+              {initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-2">
+                <p className="truncate text-[19px] font-semibold tracking-[-0.02em] text-foreground">
+                  {model.name}
+                </p>
+                <LinkStatus />
+              </div>
+              <p className="mt-0.5 truncate text-[14px] text-muted-foreground">
+                {premise?.address}, {premise?.area}
+              </p>
+              <p className="text-[13px] text-muted-foreground">
+                {model.phone} · ID {model.customerId}
+              </p>
+            </div>
+          </div>
+        </section>
 
-      <h2 className="mb-2 mt-6 font-semibold">My cases</h2>
-      <div className="space-y-3">
-        {model.issues.length === 0 && <Empty>No cases yet.</Empty>}
-        {model.issues.map((i) => (
-          <Card key={i.id}>
-            <div className="flex items-start justify-between gap-2"><div><p className="font-semibold">{i.type}</p><p className="text-xs text-muted-foreground">{i.id} · {i.time}</p></div><Pill>{i.status}</Pill></div>
-            <p className="mt-2 text-sm">{i.detail}</p>
-            {i.reply && <p className="mt-2 rounded-2xl bg-pale p-3 text-sm"><span className="font-semibold">{i.from === "lawma" ? "LAWMA" : "Partner"}: </span>{i.reply}</p>}
-          </Card>
-        ))}
+        <IosSection header="Environmental reporting">
+          <IosRow
+            to="/report"
+            icon={<AlertTriangle className="size-4" />}
+            iconTone="ember"
+            title="Report an issue"
+            subtitle="Draft and send a problem in seconds"
+            disclosure
+          />
+        </IosSection>
+
+        <IosSection
+          header="Quick help"
+          footer={`Routed directly to ${type.to.map((t) => (t === "lawma" ? "LAWMA" : "your partner")).join(" and ")}.`}
+        >
+          {types.map((t) => (
+            <IosRow
+              key={t.label}
+              onClick={() => setType(t)}
+              icon={<Headphones className="size-4" />}
+              iconTone={type.label === t.label ? "forest" : "slate"}
+              title={t.label}
+              selected={type.label === t.label}
+            />
+          ))}
+
+          <div className="px-4 py-3">
+            <label htmlFor={noteId} className="block text-[13px] font-medium text-muted-foreground">
+              Details
+            </label>
+            <textarea
+              id={noteId}
+              value={detail}
+              onChange={(e) => setDetail(e.target.value)}
+              rows={3}
+              placeholder="Tell us what happened…"
+              className="mt-1.5 w-full resize-none bg-transparent text-[16px] leading-[22px] text-foreground placeholder:text-[#3c3c43]/40 focus:outline-none"
+            />
+          </div>
+
+          <div className="p-4">
+            <IosButton
+              tone="primary"
+              disabled={detail.trim().length < 3}
+              onClick={() => {
+                setSent(report(type.label, detail.trim(), type.to));
+                setDetail("");
+              }}
+            >
+              Send case
+            </IosButton>
+            {sent && (
+              <p role="status" className="mt-2.5 text-center text-[13px] font-medium text-[#17682c]">
+                Case {sent} sent.
+              </p>
+            )}
+          </div>
+        </IosSection>
+
+        <section className="space-y-2">
+          <h2 className="eyebrow px-4">My cases</h2>
+          {model.issues.length === 0 ? (
+            <IosEmpty icon={<MessageSquarePlus className="size-5" />} title="No open cases">
+              Support questions and issue reports will appear here.
+            </IosEmpty>
+          ) : (
+            <div className="space-y-3">
+              {model.issues.map((i) => (
+                <div key={i.id} className="ios-card p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <p className="text-[16px] font-semibold tracking-[-0.015em] text-foreground">{i.type}</p>
+                      <p className="text-[12px] text-muted-foreground">
+                        {i.id} · {i.time}
+                      </p>
+                    </div>
+                    <IosBadge>{i.status}</IosBadge>
+                  </div>
+                  <p className="mt-2 text-[14px] leading-[20px] text-foreground/90">{i.detail}</p>
+                  {i.reply && (
+                    <div className="mt-3 rounded-[10px] bg-pale px-3.5 py-2.5 text-[14px] text-foreground">
+                      <span className="font-semibold">{i.from === "lawma" ? "LAWMA" : "Partner"}: </span>
+                      {i.reply}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <IosSection header="Collection partner">
+          <IosRow
+            icon={<Building2 className="size-4" />}
+            iconTone="blue"
+            title={partner?.name ?? "None selected"}
+            subtitle={pending ? `Change to ${pending.name} awaiting LAWMA approval` : partner?.area}
+            trailing={pending ? <IosBadge>Pending</IosBadge> : undefined}
+          />
+
+          {!pending && (
+            <div className="space-y-3 p-4">
+              <div>
+                <label htmlFor={selectId} className="block text-[13px] font-medium text-muted-foreground">
+                  Request partner transfer
+                </label>
+                <select
+                  id={selectId}
+                  value={change}
+                  onChange={(e) => {
+                    setChange(e.target.value);
+                    setChangeErr(null);
+                  }}
+                  className="mt-1.5 flex min-h-[44px] w-full rounded-[10px] bg-[#767680]/[0.1] px-3 text-[16px] text-foreground focus:outline-none"
+                >
+                  <option value="">Choose a new partner</option>
+                  {partners
+                    .filter((p) => p.id !== model.partnerId)
+                    .map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              {changeErr && (
+                <p role="alert" className="text-[13px] font-medium text-[#c92117]">
+                  {changeErr}
+                </p>
+              )}
+              <IosButton
+                tone="tinted"
+                className="min-h-[44px]"
+                disabled={!change}
+                onClick={() => setChangeErr(requestProviderChange(change))}
+              >
+                Ask LAWMA to change partner
+              </IosButton>
+            </div>
+          )}
+        </IosSection>
+
+        <IosSection footer="Resets all local device data back to the start of onboarding.">
+          <button
+            type="button"
+            onClick={() => setConfirmReset(true)}
+            className="flex min-h-[48px] w-full items-center justify-center gap-2 px-4 py-2.5 text-[16px] font-medium text-[#d92d20] transition-colors active:bg-black/[0.04]"
+          >
+            <RotateCcw className="size-4" aria-hidden="true" />
+            Start a fresh customer journey
+          </button>
+        </IosSection>
       </div>
 
-      <Card className="mt-6">
-        <p className="font-semibold">Collection partner</p>
-        <p className="mt-1 text-sm text-muted-foreground">Current: {partner?.name}{pending ? ` · waiting for LAWMA to approve ${pending.name}` : ""}</p>
-        {!pending && (
-          <>
-            <select value={change} onChange={(e) => setChange(e.target.value)} className="mt-3 h-12 w-full rounded-2xl border bg-card px-3 text-sm">
-              <option value="">Choose a new partner</option>
-              {partners.filter((p) => p.id !== model.partnerId).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
-            {changeErr && <p className="mt-2 text-sm text-destructive">{changeErr}</p>}
-            <Btn tone="ghost" className="mt-3" disabled={!change} onClick={() => setChangeErr(requestProviderChange(change))}>Ask LAWMA to change partner</Btn>
-          </>
-        )}
-      </Card>
-
-      <button onClick={() => { if (confirm("Start a fresh customer journey? This resets the demo on this device.")) reset(); }} className="mt-6 w-full text-center text-sm text-muted-foreground underline">Start a fresh customer journey</button>
+      <IosActionSheet
+        open={confirmReset}
+        onClose={() => setConfirmReset(false)}
+        title="Reset Resident Onboarding?"
+        message="This clears your local demo profile, bins, wallet activity, and returns to the welcome intro."
+        confirmLabel="Start Fresh Journey"
+        onConfirm={reset}
+        destructive
+      />
     </Phone>
   );
 }
