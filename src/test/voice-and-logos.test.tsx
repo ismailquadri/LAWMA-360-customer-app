@@ -2,7 +2,9 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { LocalVoiceAgent } from "@/components/LocalVoiceAgent";
 import { PartnerLogo } from "@/components/PartnerLogo";
+import { StickyVoiceFab } from "@/components/StickyVoiceFab";
 import { partners } from "@/lib/customer-model";
+import { StoreProvider } from "@/lib/store";
 import { buildDialectReport, DIALECTS } from "@/lib/voice-agent";
 
 describe("Partner logos", () => {
@@ -69,5 +71,31 @@ describe("Local dialect voice agent", () => {
     const [draft] = onDraftReady.mock.calls[0]!;
     expect(draft.category).toBe("Blocked drain");
     expect(draft.sendTo).toEqual(["lawma"]);
+  });
+
+  it("opens the floating sticky voice icon sheet and submits an illegal dumping report", () => {
+    render(
+      <StoreProvider>
+        <StickyVoiceFab />
+      </StoreProvider>,
+    );
+
+    const orb = screen.getByRole("button", {
+      name: /Open local dialect voice reporting assistant/i,
+    });
+    fireEvent.click(orb);
+
+    const sheet = screen.getByRole("dialog", { name: "Local Voice Agent" });
+    expect(sheet).toBeInTheDocument();
+
+    const pidginSample = DIALECTS[0]!.samples[0]!;
+    fireEvent.click(screen.getByRole("button", { name: new RegExp(pidginSample.label) }));
+    fireEvent.click(screen.getByRole("button", { name: /Translate & prepare LAWMA report/i }));
+
+    expect(screen.getByRole("dialog", { name: "Review voice report" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Send report" }));
+
+    expect(screen.getByRole("dialog", { name: "Report submitted" })).toBeInTheDocument();
+    expect(screen.getByText(/Sent to dispatch/i)).toBeInTheDocument();
   });
 });

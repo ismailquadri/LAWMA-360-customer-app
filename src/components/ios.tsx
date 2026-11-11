@@ -456,10 +456,10 @@ export function IosSheet({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className="relative w-full max-w-[430px] rounded-t-[28px] bg-[#f2f2f7] px-5 pb-8 pt-2.5 shadow-[0_-10px_40px_rgba(0,0,0,0.18)] outline-none animate-in slide-in-from-bottom duration-300"
+        className="relative flex max-h-[86%] w-full max-w-[430px] flex-col rounded-t-[28px] bg-[#f2f2f7] px-5 pb-6 pt-2.5 shadow-[0_-10px_40px_rgba(0,0,0,0.18)] outline-none animate-in slide-in-from-bottom duration-300"
       >
-        <div aria-hidden="true" className="mx-auto mb-3 h-[5px] w-9 rounded-full bg-[#3c3c43]/25" />
-        <div className="mb-3 flex items-center justify-between gap-3">
+        <div aria-hidden="true" className="mx-auto mb-3 h-[5px] w-9 shrink-0 rounded-full bg-[#3c3c43]/25" />
+        <div className="mb-3 flex shrink-0 items-center justify-between gap-3">
           <h2 id={titleId} className="text-[20px] font-bold tracking-[-0.02em] text-foreground">
             {title}
           </h2>
@@ -472,7 +472,9 @@ export function IosSheet({
             <X className="size-4" strokeWidth={2.5} />
           </button>
         </div>
-        {children}
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-2">
+          {children}
+        </div>
       </div>
     </div>
   );

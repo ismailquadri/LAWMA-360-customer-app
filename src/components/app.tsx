@@ -11,6 +11,7 @@ import {
   IosField,
   type IosButtonTone,
 } from "./ios";
+import { StickyVoiceFab } from "./StickyVoiceFab";
 
 const tabs = [
   { to: "/", label: "Home", icon: Home },
@@ -27,7 +28,7 @@ export function Phone({ children, nav = true }: { children: ReactNode; nav?: boo
   if (nav && path !== "/" && !isOnboarded) return <Navigate to="/" />;
   return (
     <div className="app-phone mx-auto flex min-h-screen max-w-[430px] flex-col bg-background">
-      <main className="ios-stagger flex-1 px-4 pb-28 pt-5" style={{ viewTransitionName: "page" }}>
+      <main className="ios-stagger flex-1 px-4 pb-36 pt-5" style={{ viewTransitionName: "page" }}>
         {children}
       </main>
       {nav && (
@@ -54,6 +55,7 @@ export function Phone({ children, nav = true }: { children: ReactNode; nav?: boo
           })}
         </nav>
       )}
+      {nav && isOnboarded && path !== "/report" && <StickyVoiceFab />}
     </div>
   );
 }

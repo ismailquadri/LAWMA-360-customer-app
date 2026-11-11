@@ -219,7 +219,7 @@ select {
 
 .app-phone main {
   padding-block-start: max(18px, env(safe-area-inset-top));
-  padding-block-end: calc(104px + env(safe-area-inset-bottom));
+  padding-block-end: calc(140px + env(safe-area-inset-bottom));
 }
 
 .app-phone h1 {
@@ -463,7 +463,7 @@ select {
 
   .mockup-scroll .app-phone main {
     padding-block-start: 56px;
-    padding-block-end: 108px;
+    padding-block-end: 152px;
   }
 
   .mockup-scroll .app-tabbar {
