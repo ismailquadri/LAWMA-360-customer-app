@@ -3,6 +3,7 @@ import { Calendar, Clock, Truck } from "lucide-react";
 import { useState } from "react";
 import { z } from "zod";
 import { PageTitle, Phone } from "@/components/app";
+import { PartnerLogo } from "@/components/PartnerLogo";
 import {
   IosBadge,
   IosButton,
@@ -38,6 +39,12 @@ function ActivityPage() {
             header="Schedule a pickup"
             footer={`${partner.name} · ${money(partner.charge)} is held from your wallet until accepted.`}
           >
+            <IosRow
+              leading={<PartnerLogo partnerId={partner.id} name={partner.name} size="md" />}
+              title={partner.name}
+              subtitle={`${partner.area} · ${partner.rating}`}
+              detail={money(partner.charge)}
+            />
             {windows.map((w) => (
               <IosRow
                 key={w}

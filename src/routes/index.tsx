@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { AlertCircle, Bell, Building2, MapPin, Package, ShieldCheck } from "lucide-react";
+import { Bell, MapPin, Mic, Package } from "lucide-react";
 import { useState } from "react";
 import { brandMark, Btn, LinkStatus, Phone } from "@/components/app";
+import { PartnerLogo } from "@/components/PartnerLogo";
 import {
   IosBadge,
   IosButton,
@@ -217,8 +218,7 @@ function ChoosePartner() {
           <IosRow
             key={p.id}
             onClick={() => setPick(p.id)}
-            icon={<Building2 className="size-4" />}
-            iconTone={pick === p.id ? "forest" : "slate"}
+            leading={<PartnerLogo partnerId={p.id} name={p.name} size="md" />}
             title={p.name}
             subtitle={`${p.area} · ${p.rating} · Next: ${p.eta}`}
             detail={money(p.charge)}
@@ -302,18 +302,17 @@ function Home() {
           />
           <IosRow
             to="/report"
-            icon={<AlertCircle className="size-4" />}
+            icon={<Mic className="size-4" />}
             iconTone="ember"
-            title="Report an issue"
-            subtitle="Missed pickup or illegal dumping"
+            title="Report dumping by voice"
+            subtitle="Pidgin, Yorùbá, Igbo, Hausa & English"
             disclosure
           />
           <IosRow
             to="/you"
-            icon={<ShieldCheck className="size-4" />}
-            iconTone="blue"
+            leading={<PartnerLogo partnerId={partner?.id} name={partner?.name} size="sm" />}
             title="Collection partner"
-            detail={partner?.name.split(" ")[0]}
+            subtitle={partner?.name}
             disclosure
           />
         </IosSection>

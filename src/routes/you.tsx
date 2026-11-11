@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   AlertTriangle,
-  Building2,
   Headphones,
   MessageSquarePlus,
   RotateCcw,
 } from "lucide-react";
 import { useId, useState } from "react";
 import { LinkStatus, PageTitle, Phone } from "@/components/app";
+import { PartnerLogo } from "@/components/PartnerLogo";
 import {
   IosActionSheet,
   IosBadge,
@@ -15,8 +15,9 @@ import {
   IosEmpty,
   IosRow,
   IosSection,
+  IosSheet,
 } from "@/components/ios";
-import { partners } from "@/lib/customer-model";
+import { money, partners } from "@/lib/customer-model";
 import type { AppName } from "@/lib/hub-contract";
 import { meta } from "@/lib/meta";
 import { useStore } from "@/lib/store";
@@ -40,10 +41,10 @@ function You() {
   const [sent, setSent] = useState("");
   const [change, setChange] = useState("");
   const [changeErr, setChangeErr] = useState<string | null>(null);
+  const [showTransfer, setShowTransfer] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
 
   const noteId = useId();
-  const selectId = useId();
   const pending = partners.find((p) => p.id === model.pendingPartnerId);
 
   const initials = model.name
@@ -177,52 +178,23 @@ function You() {
 
         <IosSection header="Collection partner">
           <IosRow
-            icon={<Building2 className="size-4" />}
-            iconTone="blue"
+            leading={<PartnerLogo partnerId={partner?.id} name={partner?.name} size="md" />}
             title={partner?.name ?? "None selected"}
             subtitle={pending ? `Change to ${pending.name} awaiting LAWMA approval` : partner?.area}
+            detail={partner ? money(partner.charge) : undefined}
             trailing={pending ? <IosBadge>Pending</IosBadge> : undefined}
           />
 
           {!pending && (
-            <div className="space-y-3 p-4">
-              <div>
-                <label htmlFor={selectId} className="block text-[13px] font-medium text-muted-foreground">
-                  Request partner transfer
-                </label>
-                <select
-                  id={selectId}
-                  value={change}
-                  onChange={(e) => {
-                    setChange(e.target.value);
-                    setChangeErr(null);
-                  }}
-                  className="mt-1.5 flex min-h-[44px] w-full rounded-[10px] bg-[#767680]/[0.1] px-3 text-[16px] text-foreground focus:outline-none"
-                >
-                  <option value="">Choose a new partner</option>
-                  {partners
-                    .filter((p) => p.id !== model.partnerId)
-                    .map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name}
-                      </option>
-                    ))}
-                </select>
-              </div>
-              {changeErr && (
-                <p role="alert" className="text-[13px] font-medium text-[#c92117]">
-                  {changeErr}
-                </p>
-              )}
-              <IosButton
-                tone="tinted"
-                className="min-h-[44px]"
-                disabled={!change}
-                onClick={() => setChangeErr(requestProviderChange(change))}
-              >
-                Ask LAWMA to change partner
-              </IosButton>
-            </div>
+            <IosRow
+              onClick={() => {
+                setChangeErr(null);
+                setShowTransfer(true);
+              }}
+              title="Request partner transfer"
+              subtitle="Switch to another licensed PSP operator"
+              disclosure
+            />
           )}
         </IosSection>
 
@@ -237,6 +209,54 @@ function You() {
           </button>
         </IosSection>
       </div>
+
+      <IosSheet
+        open={showTransfer}
+        onClose={() => setShowTransfer(false)}
+        title="Switch partner"
+      >
+        <div className="space-y-4 pt-1">
+          <IosSection header="Available PSP partners">
+            {partners
+              .filter((p) => p.id !== model.partnerId)
+              .map((p) => (
+                <IosRow
+                  key={p.id}
+                  onClick={() => {
+                    setChange(p.id);
+                    setChangeErr(null);
+                  }}
+                  leading={<PartnerLogo partnerId={p.id} name={p.name} size="md" />}
+                  title={p.name}
+                  subtitle={`${p.area} · ${p.rating}`}
+                  detail={money(p.charge)}
+                  selected={change === p.id}
+                />
+              ))}
+          </IosSection>
+
+          {changeErr && (
+            <p role="alert" className="px-2 text-[13px] font-medium text-[#c92117]">
+              {changeErr}
+            </p>
+          )}
+
+          <IosButton
+            tone="primary"
+            disabled={!change}
+            onClick={() => {
+              const res = requestProviderChange(change);
+              setChangeErr(res);
+              if (!res) {
+                setShowTransfer(false);
+                setChange("");
+              }
+            }}
+          >
+            Ask LAWMA to change partner
+          </IosButton>
+        </div>
+      </IosSheet>
 
       <IosActionSheet
         open={confirmReset}

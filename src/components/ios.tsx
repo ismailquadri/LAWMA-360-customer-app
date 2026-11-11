@@ -50,6 +50,7 @@ interface IosRowBaseProps {
   title: ReactNode;
   subtitle?: ReactNode | undefined;
   detail?: ReactNode | undefined;
+  leading?: ReactNode | undefined;
   icon?: ReactNode | undefined;
   iconTone?: IosIconTone | undefined;
   disclosure?: boolean | undefined;
@@ -62,6 +63,7 @@ function IosRowContent({
   title,
   subtitle,
   detail,
+  leading,
   icon,
   iconTone = "forest",
   disclosure,
@@ -70,7 +72,8 @@ function IosRowContent({
 }: IosRowBaseProps) {
   return (
     <>
-      {icon && (
+      {leading}
+      {!leading && icon && (
         <span
           aria-hidden="true"
           className={cn(

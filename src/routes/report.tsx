@@ -1,24 +1,36 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, Check, Landmark, Sparkles } from "lucide-react";
+import { Check, Landmark, Sparkles } from "lucide-react";
 import { useId, useState } from "react";
+import { z } from "zod";
 import { PageTitle, Phone } from "@/components/app";
+import { LocalVoiceAgent } from "@/components/LocalVoiceAgent";
+import { PartnerLogo } from "@/components/PartnerLogo";
 import {
   IosBadge,
   IosButton,
   IosRow,
   IosSection,
+  IosSegmentedControl,
 } from "@/components/ios";
 import { meta } from "@/lib/meta";
 import { REPORT_CATEGORIES, type ReportDraft } from "@/lib/report-ai";
 import { useStore } from "@/lib/store";
 
 export const Route = createFileRoute("/report")({
-  head: () => meta("Report an issue", "Describe a waste problem and get a clear report drafted for your partner or LAWMA."),
+  validateSearch: z.object({ mode: z.enum(["voice", "text"]).optional() }),
+  head: () => meta("Report an issue", "Speak in Pidgin, Yorùbá, Igbo, Hausa or English to report illegal dumping."),
   component: ReportPage,
 });
 
+const modeOptions = [
+  { value: "voice" as const, label: "Voice Agent" },
+  { value: "text" as const, label: "Type Report" },
+] as const;
+
 function ReportPage() {
-  const { partner, report } = useStore();
+  const search = Route.useSearch();
+  const { partner, premise, report } = useStore();
+  const [mode, setMode] = useState<"voice" | "text">(search.mode ?? "voice");
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -30,15 +42,17 @@ function ReportPage() {
   const titleId = useId();
   const bodyId = useId();
 
-  const run = async () => {
+  const runTextDraft = async () => {
     setBusy(true);
     setErr(null);
     try {
+      const lower = text.toLowerCase();
+      const isDump = /(dump|gutter|drain|canal|burn|refuse|illegal)/.test(lower);
       setDraft({
-        category: "Other",
-        urgency: "medium",
-        sendTo: ["partner"],
-        title: "Resident service report",
+        category: isDump ? "Illegal dumping" : "Other",
+        urgency: isDump ? "high" : "medium",
+        sendTo: isDump ? ["lawma"] : ["partner"],
+        title: isDump ? "Illegal dumping report" : "Resident service report",
         report: text.trim(),
       });
     } catch {
@@ -77,41 +91,65 @@ function ReportPage() {
     <Phone>
       <PageTitle
         title="Report an issue"
-        sub="Describe the problem in your own words to draft a report."
+        sub="Report illegal dumping or waste issues in your local dialect."
       />
 
       <div className="space-y-6">
-        <IosSection header="What happened?">
-          <div className="px-4 py-3">
-            <label htmlFor={descId} className="sr-only">
-              Describe the waste issue
-            </label>
-            <textarea
-              id={descId}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              rows={4}
-              maxLength={2000}
-              placeholder="e.g. Someone has been dumping refuse beside the canal at the end of our street for 3 days…"
-              className="w-full resize-none bg-transparent text-[16px] leading-[22px] text-foreground placeholder:text-[#3c3c43]/40 focus:outline-none"
-            />
-          </div>
-          {err && (
-            <p role="alert" className="px-4 py-2 text-[14px] font-medium text-[#c92117]">
-              {err}
-            </p>
-          )}
-          <div className="p-4">
-            <IosButton
-              tone="primary"
-              disabled={busy || text.trim().length < 8}
-              onClick={run}
-            >
-              <Sparkles className="size-4" aria-hidden="true" />
-              {busy ? "Drafting report…" : draft ? "Draft again" : "Draft my report"}
-            </IosButton>
-          </div>
-        </IosSection>
+        <IosSegmentedControl
+          label="Reporting method"
+          options={modeOptions}
+          value={mode}
+          onChange={(next) => setMode(next)}
+        />
+
+        {mode === "voice" ? (
+          <LocalVoiceAgent
+            address={premise?.address}
+            area={premise?.area}
+            onDraftReady={(voiceDraft, rawText) => {
+              setText(rawText);
+              setDraft({
+                category: voiceDraft.category,
+                urgency: voiceDraft.urgency,
+                sendTo: voiceDraft.sendTo,
+                title: voiceDraft.title,
+                report: voiceDraft.report,
+              });
+            }}
+          />
+        ) : (
+          <IosSection header="What happened?">
+            <div className="px-4 py-3">
+              <label htmlFor={descId} className="sr-only">
+                Describe the waste issue
+              </label>
+              <textarea
+                id={descId}
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                rows={4}
+                maxLength={2000}
+                placeholder="e.g. Someone has been dumping refuse beside the canal at the end of our street for 3 days…"
+                className="w-full resize-none bg-transparent text-[16px] leading-[22px] text-foreground placeholder:text-[#3c3c43]/40 focus:outline-none"
+              />
+            </div>
+            {err && (
+              <p role="alert" className="px-4 py-2 text-[14px] font-medium text-[#c92117]">
+                {err}
+              </p>
+            )}
+            <div className="p-4">
+              <IosButton
+                tone="primary"
+                disabled={busy || text.trim().length < 8}
+                onClick={runTextDraft}
+              >
+                <Sparkles className="size-4" aria-hidden="true" />
+                {busy ? "Drafting report…" : draft ? "Draft again" : "Draft my report"}
+              </IosButton>
+            </div>
+          </IosSection>
+        )}
 
         {draft && (
           <>
@@ -166,8 +204,7 @@ function ReportPage() {
             <IosSection header="Send to">
               <IosRow
                 onClick={() => toggle("partner")}
-                icon={<Building2 className="size-4" />}
-                iconTone="forest"
+                leading={<PartnerLogo partnerId={partner?.id} name={partner?.name} size="sm" />}
                 title={partner?.name ?? "My collection partner"}
                 subtitle="Handles missed pickups and bin issues"
                 selected={draft.sendTo.includes("partner")}

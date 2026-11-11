@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Package, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { PageTitle, Phone } from "@/components/app";
+import { PartnerLogo } from "@/components/PartnerLogo";
 import {
   IosBadge,
   IosButton,
@@ -37,6 +38,13 @@ function Bins() {
         title="My smart bins"
         sub={partner ? `Delivered and serviced by ${partner.name}.` : undefined}
       />
+
+      {partner && (
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-card py-1 pl-1.5 pr-3 shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-black/[0.06]">
+          <PartnerLogo partnerId={partner.id} name={partner.name} size="xs" />
+          <span className="text-[13px] font-medium text-foreground">{partner.name}</span>
+        </div>
+      )}
 
       <div className="space-y-6">
         {model.bins.length === 0 ? (
