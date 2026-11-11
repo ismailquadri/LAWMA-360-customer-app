@@ -20,7 +20,7 @@ const methods = [
 type Filter = "all" | "in" | "out";
 
 function WalletPage() {
-  const { model, topUp, email } = useStore();
+  const { model, topUp } = useStore();
   const [sheet, setSheet] = useState<null | "amount" | "method" | "done">(null);
   const [amount, setAmount] = useState(5000);
   const [filter, setFilter] = useState<Filter>("all");

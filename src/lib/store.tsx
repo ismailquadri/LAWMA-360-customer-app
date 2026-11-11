@@ -1,18 +1,19 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { AppName } from "./hub-contract";
 import {
-  applyInbound, blankModel, money, newId, OPEN_PICKUP, partners, premises, stamp,
+  blankModel, money, newId, OPEN_PICKUP, partners, premises, stamp,
   type Model, type Notice,
 } from "./customer-model";
 
 type Link = "demo" | "connecting" | "connected" | "offline";
 
-export type Auth = "loading" | "signedOut" | "signedIn";
+const MODEL_KEY = "lawma-customer-demo-v2";
+const INTRO_KEY = "lawma-customer-intro-v2";
+
 type Store = {
-  demoSignIn: (email: string, signup: boolean) => void;
-  auth: Auth;
-  email: string;
-  signOut: () => Promise<void>;
+  introDone: boolean;
+  completeIntro: () => void;
+  isOnboarded: boolean;
   model: Model;
   ready: boolean;
   link: Link;
@@ -34,24 +35,30 @@ const Ctx = createContext<Store | null>(null);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const [model, setModel] = useState<Model>(() => blankModel(""));
+  const [introDone, setIntroDone] = useState(false);
   const [ready, setReady] = useState(false);
   const [link, setLink] = useState<Link>("connecting");
   const latest = useRef(model);
   latest.current = model;
 
-  const [auth, setAuth] = useState<Auth>("loading");
-  const [email, setEmail] = useState("");
-  const loadedFor = useRef("");
-
-  // Public presentation mode: all resident changes stay on this device.
+  // Login-free presentation mode: onboarding and all resident changes stay on this device.
   useEffect(() => {
-    const demo = { ...blankModel("CUS-DEMO-LOCAL"), name: "Adaeze", phone: "0803 000 0000", premiseId: "HOME-018", partnerId: "PAR-001", balance: 7500,
-      bins: [{ id: "BIN-DEMO-01", size: 240, state: "Active" as const }] };
-    try { const saved = localStorage.getItem("lawma-customer-demo-v1"); setModel(saved ? { ...demo, ...JSON.parse(saved) } : demo); } catch { setModel(demo); }
-    setAuth("signedOut"); setEmail("Demo resident"); setReady(true); setLink("demo");
+    const initial = { ...blankModel("CUS-DEMO-LOCAL"), balance: 7500 };
+    try {
+      const saved = localStorage.getItem(MODEL_KEY);
+      const parsed = saved ? { ...initial, ...JSON.parse(saved) } : initial;
+      setModel(parsed);
+      const seen = localStorage.getItem(INTRO_KEY) === "1" || Boolean(parsed.name && parsed.premiseId && parsed.partnerId);
+      setIntroDone(seen);
+    } catch {
+      setModel(initial);
+      setIntroDone(false);
+    }
+    setReady(true);
+    setLink("demo");
   }, []);
   useEffect(() => {
-    if (ready) { try { localStorage.setItem("lawma-customer-demo-v1", JSON.stringify(model)); } catch { /* Storage may be unavailable in private browsing. */ } }
+    if (ready) { try { localStorage.setItem(MODEL_KEY, JSON.stringify(model)); } catch { /* Storage may be unavailable in private browsing. */ } }
   }, [model, ready]);
   const send = useCallback((_to: AppName[], _type: string, _payload: Record<string, unknown>, _ref?: string) => { setLink("demo"); }, []);
 
@@ -60,15 +67,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const store = useMemo<Store>(() => {
     const premise = premises.find((p) => p.id === model.premiseId);
     const partner = partners.find((p) => p.id === model.partnerId);
+    const isOnboarded = Boolean(introDone && model.name && model.premiseId && model.partnerId);
     return {
-      auth, email, model, ready, link, premise, partner,
-      demoSignIn(mail, signup) {
-        setEmail(mail.trim() || "Demo resident");
-        if (signup) setModel({ ...blankModel("CUS-DEMO-LOCAL"), balance: 7500 });
-        else setModel(s => ({ ...s, name: s.name || "Adaeze", premiseId: s.premiseId || "HOME-018", partnerId: s.partnerId || "PAR-001" }));
-        setAuth("signedIn");
+      introDone,
+      completeIntro() {
+        setIntroDone(true);
+        try { localStorage.setItem(INTRO_KEY, "1"); } catch { /* ignore */ }
       },
-      async signOut() { setAuth("signedOut"); },
+      isOnboarded,
+      model, ready, link, premise, partner,
       start(name, phone) {
         setModel((s) => ({ ...s, name: name.trim(), phone: phone.trim() }));
         setTimeout(() => send(["lawma"], "customer.registered", {}), 0);
@@ -130,10 +137,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return id;
       },
       reset() {
-        setModel((s) => blankModel(s.customerId));
+        setModel((s) => ({ ...blankModel(s.customerId), balance: 7500 }));
+        setIntroDone(false);
+        try {
+          localStorage.removeItem(INTRO_KEY);
+          localStorage.removeItem(MODEL_KEY);
+        } catch { /* ignore */ }
       },
     };
-  }, [auth, email, model, ready, link, send]);
+  }, [introDone, model, ready, link, send]);
 
   return <Ctx.Provider value={store}>{children}</Ctx.Provider>;
 }

@@ -20,7 +20,7 @@ const types: { label: string; to: AppName[] }[] = [
 ];
 
 function You() {
-  const { model, partner, premise, report, requestProviderChange, reset, email, signOut } = useStore();
+  const { model, partner, premise, report, requestProviderChange, reset } = useStore();
   const [type, setType] = useState(types[0]!);
   const [detail, setDetail] = useState("");
   const [sent, setSent] = useState("");
@@ -72,7 +72,6 @@ function You() {
         )}
       </Card>
 
-      <Btn tone="ghost" className="mt-5" onClick={() => void signOut()}>Sign out of demo</Btn>
       <button onClick={() => { if (confirm("Start a fresh customer journey? This resets the demo on this device.")) reset(); }} className="mt-6 w-full text-center text-sm text-muted-foreground underline">Start a fresh customer journey</button>
     </Phone>
   );

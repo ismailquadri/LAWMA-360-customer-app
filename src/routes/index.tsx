@@ -16,9 +16,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { auth, ready, model } = useStore();
-  if (auth === "signedOut") return <Intro />;
-  if (auth === "loading" || !ready) return <Splash />;
+  const { ready, introDone, completeIntro, model } = useStore();
+  if (!ready) return <Splash />;
+  if (!introDone) return <Intro onDone={completeIntro} />;
   if (!model.name) return <Profile />;
   if (!model.premiseId) return <Address />;
   if (!model.partnerId) return <ChoosePartner />;
@@ -40,7 +40,7 @@ const slides = [
   { img: collectionImg, eyebrow: "One line to LAWMA", title: "Report a problem in seconds.", body: "Describe it in your own words — we write it up clearly and send it to the right people." },
 ];
 
-function Intro() {
+function Intro({ onDone }: { onDone: () => void }) {
   const [i, setI] = useState(0);
   const s = slides[i]!;
   const last = i === slides.length - 1;
@@ -66,11 +66,15 @@ function Intro() {
           ))}
         </div>
         {last ? (
-          <Link to="/auth"><Btn tone="ember">Get started</Btn></Link>
+          <Btn tone="ember" onClick={onDone}>Get started</Btn>
         ) : (
           <Btn tone="light" onClick={() => setI(i + 1)}>Next</Btn>
         )}
-        <Link to="/auth" className="block text-center text-sm font-medium opacity-80">I already have an account</Link>
+        {!last && (
+          <button type="button" onClick={onDone} className="block w-full text-center text-sm font-medium opacity-80">
+            Skip intro
+          </button>
+        )}
       </div>
     </div>
   );
@@ -93,12 +97,12 @@ function Steps({ n, title, sub }: { n: number; title: string; sub?: string | und
 }
 
 function Profile() {
-  const { start, email } = useStore();
+  const { start } = useStore();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   return (
     <Phone nav={false}>
-      <Steps n={1} title="Tell us about you" sub={`Signed in as ${email}. Your partner uses these to reach you.`} />
+      <Steps n={1} title="Tell us about you" sub="Your collection partner uses these details to reach you." />
       <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); if (name.trim() && phone.trim()) start(name, phone); }}>
         <Field label="Full name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Adaeze Okafor" required autoComplete="name" />
         <Field label="Phone number" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0803 000 0000" inputMode="tel" required autoComplete="tel" />

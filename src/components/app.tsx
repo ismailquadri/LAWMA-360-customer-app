@@ -15,9 +15,9 @@ const tabs = [
 
 export function Phone({ children, nav = true }: { children: ReactNode; nav?: boolean }) {
   const path = useRouterState({ select: (s) => s.location.pathname });
-  const { auth, ready } = useStore();
-  if (nav && path !== "/" && auth === "signedOut") return <Navigate to="/" />;
+  const { isOnboarded, ready } = useStore();
   if (nav && path !== "/" && !ready) return <div className="mx-auto min-h-screen max-w-[430px] bg-background" />;
+  if (nav && path !== "/" && !isOnboarded) return <Navigate to="/" />;
   return (
     <div className="app-phone mx-auto flex min-h-screen max-w-[430px] flex-col bg-background shadow-xl">
       <main className="ios-stagger flex-1 px-5 pb-28 pt-6" style={{ viewTransitionName: "page" }}>{children}</main>
