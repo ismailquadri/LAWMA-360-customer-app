@@ -46,10 +46,10 @@ function Intro({ onDone }: { onDone: () => void }) {
   const last = i === slides.length - 1;
   return (
     <div className="mx-auto flex min-h-screen max-w-[430px] flex-col bg-primary text-primary-foreground">
-      <div className="relative flex-1 overflow-hidden">
+      <div className="relative min-h-[240px] flex-1 overflow-hidden">
         <img key={s.img} src={s.img} alt="" className="absolute inset-0 size-full object-cover animate-in fade-in duration-500" />
         <div className="hero-wash-forest absolute inset-0" />
-        <div className="absolute left-5 top-6 flex items-center gap-2">
+        <div className="absolute left-5 top-6 flex items-center gap-2 min-[480px]:top-14">
           <img src={brandMark} alt="" className="size-9 rounded-xl bg-card p-1" />
           <img src={wordmark} alt="SmartWaste360" className="h-6" />
         </div>
@@ -59,7 +59,7 @@ function Intro({ onDone }: { onDone: () => void }) {
           <p className="mt-3 text-[15px] opacity-90">{s.body}</p>
         </div>
       </div>
-      <div className="space-y-4 px-6 pb-8 pt-5">
+      <div className="space-y-4 px-6 pb-8 pt-5 min-[480px]:pb-9">
         <div className="flex justify-center gap-2" role="tablist" aria-label="Intro slides">
           {slides.map((_, n) => (
             <button key={n} aria-label={`Slide ${n + 1}`} onClick={() => setI(n)} className={cn("h-1.5 rounded-full transition-all", n === i ? "w-8 bg-ember" : "w-3 bg-primary-foreground/40")} />
@@ -153,7 +153,7 @@ function ChoosePartner() {
           </button>
         ))}
       </div>
-      <div className="sticky bottom-4 mt-5"><Btn disabled={!pick} onClick={() => choosePartner(pick)}>Confirm partner</Btn></div>
+      <div className="sticky bottom-4 mt-5 min-[480px]:bottom-6"><Btn disabled={!pick} onClick={() => choosePartner(pick)}>Confirm partner</Btn></div>
     </Phone>
   );
 }

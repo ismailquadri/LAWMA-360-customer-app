@@ -12,6 +12,7 @@ import { type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { StoreProvider } from "../lib/store";
+import { MockupFrame } from "../components/MockupFrame";
 // import { EvaluationAccessWall } from "../components/legal/EvaluationAccessWall";
 
 function NotFoundComponent() {
@@ -89,7 +90,9 @@ function RootComponent() {
       <EvaluationAccessWall>
       */}
         <StoreProvider>
-          <Outlet />
+          <MockupFrame>
+            <Outlet />
+          </MockupFrame>
         </StoreProvider>
       {/*
       </EvaluationAccessWall>
