@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-// Shared message contract between the customer app, the Partner Hub and the
-// LAWMA management workspace. Keep in sync with docs/app-messages.md.
-export const APPS = ["customer", "partner", "lawma"] as const;
+// Shared message contract between the Customer App, Partner Hub, Operator Handheld,
+// and the LAWMA Management Workspace. Keep in sync with docs/app-messages.md.
+export const APPS = ["customer", "partner", "operator", "lawma"] as const;
 export type AppName = (typeof APPS)[number];
 
 export const appName = z.enum(APPS);
@@ -32,11 +32,12 @@ export type HubMessage = {
 /** Decide which app a request key belongs to. Returns null when it matches none. */
 export function appForKey(
   key: string | null | undefined,
-  keys: { partner?: string | undefined; lawma?: string | undefined },
+  keys: { partner?: string | undefined; lawma?: string | undefined; operator?: string | undefined },
 ): AppName | null {
   if (!key || key.length < 8) return null;
   if (keys.partner && key === keys.partner) return "partner";
   if (keys.lawma && key === keys.lawma) return "lawma";
+  if (keys.operator && key === keys.operator) return "operator";
   return null;
 }
 
