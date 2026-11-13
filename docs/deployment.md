@@ -1,6 +1,6 @@
 # Customer deployment
 
-Repository: https://github.com/ismailquadri/LAWMA-360-customer-app
+Repository: https://github.com/ismailquadri/SmartWaste360-Residents-App.git
 Production: https://smartwaste360-mobile.vercel.app
 Vercel project: smartwaste360-mobile (prj_QMVbEsPcTsIkIADH4MmiPogw1Qf4).
 
