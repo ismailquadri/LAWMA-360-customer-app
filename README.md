@@ -22,6 +22,7 @@ See [deployment configuration](docs/deployment.md) and [.env.example](.env.examp
 Complete technical specifications, empirical field research, street political economy, and courtroom-grade defense playbooks are available in [`docs/`](docs/):
 
 - **[Product Requirements Document (PRD)](docs/PRD.md)**: Exhaustive 660-line specification covering compound virtual wallets, 15-minute live proximity alerts, dual-key citizen verification, kiosk agency banking, pre-storm surge skip maps, anonymous whistleblower bounties, merchant QR decals, and domestic clinical sharps safety.
+- **[Prototype Gap Audit & Developer Guide](docs/prototype-gap-audit.md)**: File-by-file forensic audit of the existing `src/` prototype codebase, dissecting the 7 fatal Western/suburban planning flaws (e.g. "ChoosePartner" Uber-for-garbage fallacy), scrap-vs-keep matrices, and blueprints for the dev team.
 - **[Standalone Modular PLD Specifications (docs/modules/)](docs/modules/)**: Complete suite of 9 courtroom-grade engineering modules (4,741 total lines, all >= 500 lines per module):
   - `01-RES-MOD-COMPOUND-CADASTRE.md` (556 lines): Compound Virtual Wallets, Room Child Accounts & Tenancy Law Immunity.
   - `02-RES-MOD-TRACKING.md` (508 lines): Live Corridor Geofencing, Proximity Alerts & Curb Dwell Reduction.

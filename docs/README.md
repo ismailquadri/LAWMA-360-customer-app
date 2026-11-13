@@ -9,7 +9,10 @@ This directory contains the complete, courtroom-grade engineering specifications
 1. **[Product Requirements Document (PRD.md)](PRD.md)**  
    *Comprehensive 660-line master v4.0 specification: Sovereign multi-tenant compound virtual wallets (`WAL-COMP-*` & `VACC-*`), live 15-minute compactor proximity alerts (`PROX-PING-*`), Dual-Key Citizen Remediation Closure (`CURE-CIT-*`), zero-fee kiosk agency cash deposits (`POS-VOUCH-*`), NiMet pre-storm surge alerts, cryptographic anonymous whistleblower vault (`ANON-WHISTLE-*`), Digital Merchant Sanitation QR Decals (`DECAL-QR-*`), and "Sort & Earn" recyclable cashback.*
 
-2. **[Standalone Modular PLD Specifications (docs/modules/)](modules/)**  
+2. **[Prototype Forensic Gap Audit & Developer Guide (prototype-gap-audit.md)](prototype-gap-audit.md)**  
+   *Essential engineering handoff document for the development team: File-by-file forensic audit of the existing `src/` prototype codebase, detailed breakdown of the 7 fatal Western/suburban planning flaws (e.g. "ChoosePartner" Uber-for-garbage fallacy), scrap-vs-keep-vs-refactor matrices, state machine migrations, and UI/UX blueprints for all 9 modules.*
+
+3. **[Standalone Modular PLD Specifications (docs/modules/)](modules/)**  
    *The complete suite of 9 deep-dive, courtroom-grade Product Level Documents (4,741 total lines, all >= 500 lines per module):*
    - **[`01-RES-MOD-COMPOUND-CADASTRE.md`](modules/01-RES-MOD-COMPOUND-CADASTRE.md)** (556 lines): LAGIS parcel binding, master compound wallets (`WAL-COMP-*`), fractional room virtual accounts (`VACC-*`), dynamic room rosters, transient tenant decoupling, statutory landlord tariff ceilings, and rent-markup defense certificates under Lagos State Tenancy Law 2011 Sec 44.
    - **[`02-RES-MOD-TRACKING.md`](modules/02-RES-MOD-TRACKING.md)** (508 lines): Live compactor telematics, 1.5km corridor-bound geofence proximity alerts (`PROX-PING-*`), Kalman/Haversine ETA algorithms, curb-side dwell-time minimization (<20 min), SSE low-power streaming, and multi-channel retry backoff.
