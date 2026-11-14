@@ -23,6 +23,7 @@ Complete technical specifications, empirical field research, street political ec
 
 - **[Product Requirements Document (PRD)](docs/PRD.md)**: Exhaustive 660-line specification covering compound virtual wallets, 15-minute live proximity alerts, dual-key citizen verification, kiosk agency banking, pre-storm surge skip maps, anonymous whistleblower bounties, merchant QR decals, and domestic clinical sharps safety.
 - **[Prototype Gap Audit & Developer Guide](docs/prototype-gap-audit.md)**: File-by-file forensic audit of the existing `src/` prototype codebase, dissecting the 7 fatal Western/suburban planning flaws (e.g. "ChoosePartner" Uber-for-garbage fallacy), scrap-vs-keep matrices, and blueprints for the dev team.
+- **[UX Design System & Multilingual Copy Guide](docs/ux-design-and-copy-guide.md)**: Exhaustive 549-line design tokens and production copy bible across all 5 Nigerian dialects (English, Pidgin, Yorùbá, Hausa, Igbo) for all 9 screens and components.
 - **[Standalone Modular PLD Specifications (docs/modules/)](docs/modules/)**: Complete suite of 9 courtroom-grade engineering modules (4,741 total lines, all >= 500 lines per module):
   - `01-RES-MOD-COMPOUND-CADASTRE.md` (556 lines): Compound Virtual Wallets, Room Child Accounts & Tenancy Law Immunity.
   - `02-RES-MOD-TRACKING.md` (508 lines): Live Corridor Geofencing, Proximity Alerts & Curb Dwell Reduction.

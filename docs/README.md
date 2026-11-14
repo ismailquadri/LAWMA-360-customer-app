@@ -12,7 +12,10 @@ This directory contains the complete, courtroom-grade engineering specifications
 2. **[Prototype Forensic Gap Audit & Developer Guide (prototype-gap-audit.md)](prototype-gap-audit.md)**  
    *Essential engineering handoff document for the development team: File-by-file forensic audit of the existing `src/` prototype codebase, detailed breakdown of the 7 fatal Western/suburban planning flaws (e.g. "ChoosePartner" Uber-for-garbage fallacy), scrap-vs-keep-vs-refactor matrices, state machine migrations, and UI/UX blueprints for all 9 modules.*
 
-3. **[Standalone Modular PLD Specifications (docs/modules/)](modules/)**  
+3. **[UX Design System & Multilingual UX Copy Guide (ux-design-and-copy-guide.md)](ux-design-and-copy-guide.md)**  
+   *Comprehensive 549-line UX and copy bible for frontend engineers and content designers: High-contrast equatorial sunlight design tokens, 48px touch targets, complete screen-by-screen wireframe mappings, and exact production copy matrices across all 5 Nigerian dialects (English `en-NG`, Pidgin `pcm`, Yorùbá `yo`, Hausa `ha`, Igbo `ig`).*
+
+4. **[Standalone Modular PLD Specifications (docs/modules/)](modules/)**  
    *The complete suite of 9 deep-dive, courtroom-grade Product Level Documents (4,741 total lines, all >= 500 lines per module):*
    - **[`01-RES-MOD-COMPOUND-CADASTRE.md`](modules/01-RES-MOD-COMPOUND-CADASTRE.md)** (556 lines): LAGIS parcel binding, master compound wallets (`WAL-COMP-*`), fractional room virtual accounts (`VACC-*`), dynamic room rosters, transient tenant decoupling, statutory landlord tariff ceilings, and rent-markup defense certificates under Lagos State Tenancy Law 2011 Sec 44.
    - **[`02-RES-MOD-TRACKING.md`](modules/02-RES-MOD-TRACKING.md)** (508 lines): Live compactor telematics, 1.5km corridor-bound geofence proximity alerts (`PROX-PING-*`), Kalman/Haversine ETA algorithms, curb-side dwell-time minimization (<20 min), SSE low-power streaming, and multi-channel retry backoff.
