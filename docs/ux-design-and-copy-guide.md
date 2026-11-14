@@ -174,12 +174,16 @@ The system supports 5 canonical languages. Every screen, error, and audio prompt
    - Outstanding Room Assessment: `₦2,500.00 / month`.
    - Payment Status Badge: `PAID (Expires: Nov 30)` or `OVERDUE (3 Days Left)`.
    - **"Download Tenancy Protection Certificate":** Instant PDF button invoking Section 44 of Lagos State Tenancy Law 2011 to prove tenant cannot be charged extra sanitation fees by landlord.
+   - **Sub-60% Quorum Quarantine Protected State (Active when Compound < 60% Compliant):**
+     - High-Contrast Alert Banner: *"Compound Drum Quarantined. Your Room is Protected!"*
+     - **"My Green Collection Bags" Drawer:** 4 serialized cryptographic QR codes for weekly doorstep collection by the truck loader (`ROOM-QR-BAG-*`).
 3. **Compound Master View Content:**
    - Total Tenement Monthly Liability: `₦25,000.00` (10 Rooms $\times$ ₦2,500).
    - Room-by-Room Payment Matrix: Visual grid showing Room 1 to 10 as Green (Paid) or Orange (Unpaid).
-   - Compound Virtual Wallet Balance: `₦17,500.00 / ₦25,000.00 (70% Cleared)`.
+   - Compound Virtual Wallet Balance: `₦17,500.00 / ₦25,000.00 (70% Cleared)` or `₦5,000.00 / ₦25,000.00 (20% - QUARANTINED)`.
+   - **Mobile Court Arrears Escalation Warning (for Landlords / Caretakers):** Renders when compound arrears exceed 60 days, displaying electronic Form 1 statutory summons notice and BVN bank attachment warnings.
 
-#### Multilingual Microcopy Matrix (Tenancy Law Protection Certificate)
+#### Multilingual Microcopy Matrix (Tenancy Protection, Quorum Quarantine & Mobile Court)
 
 ```
 +------------------+----------------------------------------------------------------------------------------------------+
@@ -194,6 +198,34 @@ The system supports 5 canonical languages. Every screen, error, and audio prompt
 |                  |        shara a karkashin dokar jihar Legas."                                                       |
 |                  | ig:    "Akwụkwọ Nchedo Ndị bi n'Ụlọ: Ọnụ ụlọ 4 akwụchaala. Onye nwe ụlọ enweghị ikike ịnara ego ọzọ|
 |                  |        n'okpuru Iwu Lagos Steeti."                                                                 |
++------------------+----------------------------------------------------------------------------------------------------+
+| Quorum Quarantine| en-NG: "COMPOUND DRUM QUARANTINED! Your communal drum is locked due to unpaid neighbors. BUT YOUR   |
+| Alert Banner     |        ROOM IS PROTECTED! Present your Green QR Bag to the truck loader at the gate."              |
+|                  | pcm:   "HOUSE DUSTBIN DON LOCK! Neighbors never pay so driver no go carry drum. BUT YOUR ROOM DEY |
+|                  |        SAFE! Carry your Green Bag with QR code give the truck boy."                                |
+|                  | yo:    "GARÁWÀ ILÉ TI WỌNÚ ÀYÈGBÈ! Àwọn ará ilé kò sanwó, ọkọ̀ kò ní gbé garáwà. ṢÙGBỌ́N YÀRÁ YÍN WÀ     |
+|                  |        LÀÀBÒ! Ẹ fún olùgbé-ìdọ̀tí ní àpò aláwọ̀ ewé pẹ̀lú koodu QR yín."                             |
+|                  | ha:    "AN KULLE KWANDON GIDA! Saboda sauran makwabta ba su biya ba. AMMA DAKINKU YANA DA KARIYA!  |
+|                  |        Nuna jakar kore mai lambar QR ga masu kwashe shara."                                        |
+|                  | ig:    "A KỤCHIE GBỌMBGỌM ỤLỌ! Ebe agbata obi akwụghị ụgwọ. MA ỌNỤ ỤLỌ GỊ DỊ NCHEKWA! Gosi nwa       |
+|                  |        okorobịa ụgbọ ala akpa akwụkwọ ndụ gị nwere koodu QR."                                      |
++------------------+----------------------------------------------------------------------------------------------------+
+| Green Bag Drawer | en-NG: "My Green Collection Bags (4 Active Doorstep QR Passes)"                                    |
+| Button           | pcm:   "My Special Green Bags (4 Active Gate Passes)"                                              |
+|                  | yo:    "Àpò Ìdọ̀tí Aláwọ̀ Ewé Mi (Páàsì QR Mẹ́rin fún Ilẹ̀kùn)"                                            |
+|                  | ha:    "Jakunkunan Sharata Masu Kore (Katin QR Guda 4 na Kofa)"                                    |
+|                  | ig:    "Akpa Mkpofu Ahịhịa Akwụkwọ Ndụ M (Pasi QR 4 Maka Ọnụ Ụzọ)"                                 |
++------------------+----------------------------------------------------------------------------------------------------+
+| Mobile Court     | en-NG: "LEGAL NOTICE: Arrears exceed 60 days. Special Offences Court Form 1 Summons and BVN Bank  |
+| Summons Alert    |        Garnishee Order initiated against property title."                                          |
+| (Landlord View)  | pcm:   "COURT WARNING: Unpaid waste bill pass 60 days. Form 1 Summons don ready, and government fit|
+|                  |        block landlord bank account with BVN."                                                      |
+|                  | yo:    "ÌKILỌ̀ ILÉ-ẸJỌ́: Gbèsè kọjá ogọ́ta ọjọ́. Ìwé pè ilé-ẹjọ́ Form 1 ti jáde, wọ́n sì lè di àkópọ̀ owó   |
+|                  |        onílé ní báǹkì pẹ̀lú BVN rẹ̀."                                                              |
+|                  | ha:    "GARGADIN KOTU: Basussuka sun wuce kwanaki 60. An tura sammacin kotu, kuma za a iya toshe   |
+|                  |        asusun bankin mai gida ta hanyar BVN."                                                      |
+|                  | ig:    "ỊDỌ AKA NA NTỊ ỤLỌ IKPE: Ụgwọ gafere ụbọchị 60. Ezipụla akwụkwọ ịkpọ òkù ụlọ ikpe, nweekwa  |
+|                  |        ike ịkpọchie akaụntụ ụlọ akụ onye nwe ụlọ site na BVN ya."                                  |
 +------------------+----------------------------------------------------------------------------------------------------+
 ```
 

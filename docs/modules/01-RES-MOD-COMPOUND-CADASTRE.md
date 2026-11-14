@@ -11,7 +11,9 @@
 - **Dr. Kadri Obafemi Hamzat (KOH)**, Executive Governor of Lagos State
 - **Hon. Tokunbo Wahab**, Honourable Commissioner, Ministry of the Environment and Water Resources (MEWR)
 - **Hon. Rasheed Shabi**, Chairman, House Committee on the Environment, Lagos State House of Assembly
-- **Dr. Muyiwa Gbadegesin**, Managing Director / CEO, Lagos State Waste Management Authority (LAWMA)
+- **Olajuwon Mautin Akinyemi**, Acting Managing Director / CEO, Lagos State Waste Management Authority (LAWMA)
+- **Dr. Tijani Olorunwa**, Acting Director of Operations, LAWMA
+- **Kunle Adebiyi**, Executive Director of Finance, LAWMA
 
 ---
 
@@ -73,12 +75,13 @@ In an 18-room compound in Agege or Bariga:
   - The historical debt of Room 4 is severed from the physical room and compound ledger, converting into a personal statutory civil debt bound to the departed tenant's National Identification Number (NIN) and LASRRA ID.
   - The physical room’s fractional billing pauses until a new tenant registers, preventing compound service stoppage.
 
-#### Blind Spot 2: Landlord Retaliatory Eviction ("Bypassing the Landlord")
-- **The Vector:** When an individual tenant pays LAWMA directly via the app or refuses to pay an extortionate landlord sanitation markup, the landlord serves a retaliatory "Notice to Quit" or locks the communal water supply and external gate.
-- **Engineered Solution:** **Statutory Cadastral Tariff Ceiling Certificate & Tenancy Law Shield.**
+#### Blind Spot 2: Landlord Retaliatory Eviction & The Debt Enforcement Fallacy
+- **The Vector:** When an individual tenant pays LAWMA directly via the app or refuses to pay an extortionate landlord sanitation markup, the landlord serves a retaliatory "Notice to Quit" or locks the communal water supply and external gate. Conversely, when landlords default, traditional proposals to cut electricity via DisCos fail because private electricity distribution companies (EKEDC / IKEDC) operate under federal NERC jurisdiction (Electricity Act 2023) and cannot disconnect prepaid meters for municipal sanitation debts, while Land Use Charge (LUC) title liens take years to enforce.
+- **Engineered Solution:** **Statutory Tenancy Law Shield & Mobile Court BVN-Linked Garnishee Protocol.**
   - The app publishes the legally binding Lagos State cadastral tariff ceiling for every building based on its LAGIS parcel key (`LASG-CAD-ID`).
   - Charging above this ceiling is a criminal offense under EMPL Section 88.
   - The tenant can generate an official signed State Tariff Defense Certificate. Under Section 44 of the **Lagos State Tenancy Law 2011**, retaliatory eviction or harassment for compliance with state public health statutes constitutes a criminal offense carrying mandatory fines and imprisonment.
+  - For chronic landlord arrears ($>60$ days overdue), LAWMA initiates accelerated proceedings in the **Lagos State Special Offences Court (Mobile Court)**. An automated statutory Form 1 Summons is served electronically via WhatsApp/SMS. If default persists, the Magistrate grants an *order nisi* attaching the landlord's commercial bank accounts directly via their Bank Verification Number (BVN), freezing the debt sum without touching innocent tenants' assets.
 
 #### Blind Spot 3: The "Ghost Room" Fraud by Unscrupulous Landlords
 - **The Vector:** To reduce their building's overall tariff classification, landlords register a 16-room tenement as a "4-room single-family dwelling" on the cadastral portal. The compound generates 4 times more waste than declared, resulting in overflowing bins and bankrupting the assigned PSP concessionaire.
@@ -92,6 +95,16 @@ In an 18-room compound in Agege or Bariga:
 - **Engineered Solution:** **Mixed-Use Cadastral Sub-Unit Classification.**
   - The master compound cadastre supports granular sub-unit typing: `RESIDENTIAL_ROOM` vs. `COMMERCIAL_RETAIL_SHOP` vs. `FAST_FOOD_EATERY`.
   - Commercial sub-units are assessed weighted commercial multipliers ($\omega_{\text{commercial}}$), paying higher individual shares directly through their dedicated merchant virtual accounts.
+
+#### Blind Spot 5: The "Indivisible Waste Drum Dilemma" (Sub-60% Quorum Trap)
+- **The Vector:** In a 10-room compound in Agege, Room 4 diligently settles her ₦2,500 monthly share via USSD. However, Rooms 1–3 and 5–10 default, yielding a compound collection rate of only 10% ($Q_{\text{collection}} = 0.10 < 0.60$). Because all rooms dump waste into the same communal front drum, the compactor crew cannot physically empty 1/10th of a metal bin. If the crew refuses to lift the bin, Room 4 is unfairly punished despite paying in full. If the crew empties the entire drum, the 9 defaulting rooms free-ride indefinitely, bankrupting the private PSP operator.
+- **Engineered Solution:** **Compound Quorum Quarantine & Individual Room QR Bag Protocol (`ROOM-QR-BAG-*`).**
+  - When compound collection drops below 60%, the master compound status transitions to `QUARANTINED`.
+  - The communal front drum is sealed or tagged `QUARANTINED` by the PSP crew.
+  - Compliant rooms (e.g. Room 4) are immediately issued **Serialized Sovereign Green QR Bag Vouchers** within the app (`ROOM-QR-BAG-*`).
+  - The tenant bags her domestic waste in these official digital green bags.
+  - When the compactor arrives on sweep day, the crew loader scans Room 4's bag QR code, logs the collection credit, and physically lifts *only Room 4's bags* from the doorway/threshold, leaving behind the locked communal drum.
+  - This creates immediate, acute peer social pressure within the compound courtyard: defaulting tenants see their neighbor's waste cleanly collected while their own unbagged refuse remains stranded, catalyzing immediate USSD micro-payments without state coercion.
 
 ---
 
@@ -126,7 +139,7 @@ $$\text{Minimum Service Quorum Rule:} \quad Q_{\text{collection}} = \frac{\sum_{
 
 $$\text{Mandatory PSP Service Trigger:} \quad \text{If } Q_{\text{collection}} \ge 0.60 \implies \text{Compactor Must Collect Bin}$$
 
-> **Courtroom Invariant:** As long as at least **60% of active residential rooms** have paid their individual monthly shares, the PSP is legally barred under EMPL Section 89 from withholding collection. The remaining 40% unpaid deficit is automatically converted into an accumulated statutory tax lien on the landlord's Land Use Charge (LUC) title.
+> **Courtroom Invariant:** As long as at least **60% of active residential rooms** have paid their individual monthly shares, the PSP is legally barred under EMPL Section 89 from withholding collection. The remaining unpaid deficit is automatically converted into an accumulated statutory liability enforced against the landlord via **Special Offences Mobile Court Form 1 Summons & BVN Garnishee Orders**, supplemented by long-term Land Use Charge (LUC) title liens.
 
 ### 3.3 Dynamic Arrears Decoupling & NIN Debt Binding
 When tenant $j$ vacates room $i$ with accrued arrears $A_j > 0$:
@@ -136,6 +149,38 @@ $$B_{\text{room\_i}}(t_{\text{post\_vacate}}) = 0.00$$
 $$\text{Personal Debt Transferred:} \quad \text{Debt}_{\text{civil}}(\text{NIN}_j) = \text{Debt}_{\text{civil}}(\text{NIN}_j) + A_j$$
 
 The physical room resets to zero balance upon verified `VACANT_DECLARATION`, allowing the incoming tenant to start with a clean ledger.
+
+### 3.4 Sub-60% Quorum Quarantine & Room QR Bag Protocol (`ROOM-QR-BAG-*`)
+When compound compliance falls below the required threshold ($Q_{\text{collection}} < 0.60$):
+
+$$\text{State}(\text{Compound}) = \begin{cases} 
+\text{ACTIVE\_COLLECTIVE\_SERVICE}, & \text{if } Q_{\text{collection}} \ge 0.60 \\
+\text{QUARANTINED\_COMMUNAL\_DRUM}, & \text{if } Q_{\text{collection}} < 0.60 
+\end{cases}$$
+
+Under `QUARANTINED_COMMUNAL_DRUM`:
+1. **Communal Drum Sealing:** The assigned PSP compactor crew locks or applies a visible fluorescent `QUARANTINED` tag to the shared street drum.
+2. **Cryptographic Room Bag Token Issuance:** Any compliant room $i$ where $B_i \ge L_i$ is immediately issued a serialized, verifiable QR bag token in the mobile app:
+
+$$\text{BagToken}_i = \text{HMAC-SHA256}(\text{RoomID}_i \parallel \text{Timestamp} \parallel \text{MonthCycle}, K_{\text{lawma\_private}})$$
+
+3. **Doorstep Scan & Bag Lift:** When the truck sweeps the corridor:
+   - The crew loader bypasses the locked communal drum.
+   - The loader scans $\text{BagToken}_i$ on Room 4's green bag at the gate/doorstep using the crew terminal.
+   - The loader lifts *only* the scanned bags into the compactor hopper.
+   - The system credits the PSP with an individual unit evacuation subsidy and fires an automated SMS notice to all defaulting compound residents: *"Notice: Room 4's waste has been collected. The shared compound drum remains quarantined due to ₦18,000 in arrears. Pay via USSD *384*LAWMA# to unseal your drum."*
+
+### 3.5 Two-Stage Enumerator Split Commission & LASRRA Operational Dividend
+To prevent field enumerator boycotts and protect PSP operating margins:
+1. **Two-Stage Decal Commission ($C_{\text{enum}} = ₦200$):**
+   - **Stage 1 (₦50 Instant Mobilization):** Credited immediately to the *Wole-Wole* / enumerator's wallet upon GPS verification and geotagged photographic upload of the affixed green decal.
+   - **Stage 2 (₦150 Performance Kicker):** Credited when the compound makes its first successful tariff payment via app, USSD, or POS cash rails.
+2. **LASRRA Civic Operational Dividend (Non-Cash Privilege):**
+   - Verified LASRRA Tier 2 residents are **not** granted an unfunded 10% cash discount (which would starve PSPs of diesel cash).
+   - Instead, LASRRA validation unlocks high-value **Operational Privileges**:
+     - Extended 45-day billing grace period before delinquency escalation.
+     - Free quarterly drain-cleaning tools and biodegradable waste bag allocations.
+     - Automatic enrollment in the Governor's Annual Clean Lagos Civic Sweepstakes (₦5,000,000 ward community development grants).
 
 ---
 
@@ -215,6 +260,57 @@ Protect vulnerable tenants from extortion, illegal rent hikes, and retaliatory e
 
 ---
 
+### Epic 1.5: Sub-60% Quorum Quarantine & Individual Room QR Bag Issuance (`ROOM-QR-BAG-*`)
+Protect compliant tenants when compound neighbors default, making physical waste divisible.
+
+#### User Story 1.5.1: Quarantined Drum Alert & Individual Green Bag Allocation
+- **As a** Compliant Tenant who paid my ₦2,500 share while 7 neighboring rooms defaulted,
+- **I want** to receive digital Green QR Collection Bags in the app,
+- **So that** the compactor crew collects my trash even though the shared front drum is quarantined.
+- **Acceptance Criteria:**
+  - **GIVEN** a compound whose collection quorum $Q_{\text{collection}} < 0.60$,
+  - **WHEN** the compliant tenant opens the home screen or `/wallet`,
+  - **THEN** display the Amber Banner: *"Compound Drum Quarantined. Your Room is Protected!"*; generate 4 cryptographically signed Green Bag QR codes for the monthly cycle; display instructions to present these bags at the front door on sweep morning.
+
+#### User Story 1.5.2: Truck Loader Doorstep Bag Scan & Collection Credit
+- **As a** Compactor Truck Crew Member,
+- **I want** to scan Room 4's green bag QR code at the doorway,
+- **So that** I safely collect the paying resident's refuse without lifting the non-paying communal bin.
+- **Acceptance Criteria:**
+  - **GIVEN** a quarantined compound on the sweep route,
+  - **WHEN** the crew scans `ROOM-QR-BAG-*` with the crew mobile terminal,
+  - **THEN** the scan validates immediately offline; the collection timestamp logs; the individual evacuation fee clears to the PSP escrow; and an automated SMS informs non-compliant neighbors of the selective collection.
+
+---
+
+### Epic 1.6: Mobile Court Electronic Summons & BVN Debt Attachment (`CRT-BVN-*`)
+Provide fast, unassailable judicial debt recovery against chronic defaulting landlords without violating federal DisCo boundaries.
+
+#### User Story 1.6.1: Automated Form 1 Summons Dispatch
+- **As a** LAWMA Revenue Compliance Officer,
+- **I want** the system to automatically generate and serve an electronic Form 1 Statutory Summons via WhatsApp and SMS to a landlord with $>60$ days of compound arrears,
+- **So that** legal process is initiated rapidly before the Special Offences Court.
+- **Acceptance Criteria:**
+  - **GIVEN** a landlord with accumulated arrears $>60$ days,
+  - **WHEN** the billing batch process triggers the 60-day delinquency rule,
+  - **THEN** generate a Section 84 Evidence Act-compliant electronic Form 1 Summons with return date; serve to the landlord's verified phone number; log delivery timestamp; and schedule docketing before the Magistrate.
+
+---
+
+### Epic 1.7: Two-Stage Enumerator Verification & LASRRA Operational Dividend (`LASRRA-DIV-*`)
+Incentivize ground-level enumerators while protecting private operator cash margins.
+
+#### User Story 1.7.1: Two-Stage Decal Commission Split
+- **As a** Field Environmental Health Officer (*Wole-Wole*),
+- **I want** an immediate ₦50 mobilization fee upon affixing a decal and ₦150 when the building makes its first payment,
+- **So that** my daily transportation costs are covered immediately without waiting months for landlord billing.
+- **Acceptance Criteria:**
+  - **GIVEN** an enumerator uploading a photo and GPS stamp of an affixed green decal,
+  - **WHEN** the image passes geo-boundary validation,
+  - **THEN** credit ₦50 instantly to the officer's wallet; when the compound records its first payment $\ge ₦1,000$, trigger the remaining ₦150 bonus automatically.
+
+---
+
 ## 5. Technical Architecture, State Machines & Database Schemas
 
 ### 5.1 Compound Cadastre & Room Lifecycle State Machine
@@ -280,8 +376,12 @@ CREATE TABLE customer_compounds (
     assigned_psp_partner_id VARCHAR(32) NOT NULL,
     landlord_lasrra_id VARCHAR(32),
     landlord_phone VARCHAR(16),
+    landlord_bvn_hash VARCHAR(64),
     caretaker_lasrra_id VARCHAR(32),
     caretaker_phone VARCHAR(16),
+    quorum_compliance_percent NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    quarantine_state VARCHAR(24) NOT NULL DEFAULT 'ACTIVE_SERVICE'
+        CHECK (quarantine_state IN ('ACTIVE_SERVICE', 'QUARANTINED_COMMUNAL_DRUM', 'LEGAL_ESCALATION_SUMMONS')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -326,7 +426,22 @@ CREATE TABLE room_financial_transactions (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- 4. Tenancy Vacancy & Arrears Decoupling Audit Vault
+-- 4. Sub-60% Quorum Serialized Room QR Green Bags
+CREATE TABLE room_qr_bags (
+    bag_id VARCHAR(64) PRIMARY KEY, -- E.g., 'BAG-AGE-0482-RM04-202611-01'
+    room_id VARCHAR(48) NOT NULL REFERENCES customer_rooms(room_id) ON DELETE CASCADE,
+    compound_id VARCHAR(32) NOT NULL REFERENCES customer_compounds(compound_id) ON DELETE CASCADE,
+    bag_qr_hash VARCHAR(64) NOT NULL UNIQUE,
+    month_cycle VARCHAR(7) NOT NULL, -- E.g., '2026-11'
+    issuance_timestamp TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    collection_timestamp TIMESTAMP WITH TIME ZONE,
+    scanned_by_crew_terminal_id VARCHAR(32),
+    bag_status VARCHAR(16) NOT NULL DEFAULT 'ISSUED' 
+        CHECK (bag_status IN ('ISSUED', 'COLLECTED', 'EXPIRED', 'REVOKED')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. Tenancy Vacancy & Arrears Decoupling Audit Vault
 CREATE TABLE tenancy_vacancy_audits (
     audit_id VARCHAR(64) PRIMARY KEY, -- E.g., 'VAC-AUDIT-20261113-042'
     room_id VARCHAR(48) NOT NULL REFERENCES customer_rooms(room_id),
@@ -553,4 +668,4 @@ DEPONENT / CUSTODIAN SIGNATURE
 | **Tenancy Protection** | Lagos State Tenancy Law 2011 | Zero collective compound service suspensions where room payment quorum $\ge 60\%$. | Ministry of Housing / Judiciary |
 | **Financial Inclusion** | CBN / NIBSS Financial Inclusion Mandate | Zero-fee cash deposit availability at $>95\%$ of registered neighborhood POS kiosks. | State Treasury Office (STO) |
 | **Data Sovereignty** | NDPA 2023 Section 39 | 100% of tenant identity and NIN records encrypted with AES-256 on onshore servers. | NDPC / State DPO |
-| **Sovereign Quorum** | Gubernatorial Sovereign Mandate | Signed off by Gov. Dr. Kadri Obafemi Hamzat, Comm. Wahab & MD Gbadegesin. | Lagos State Executive Council |
+| **Sovereign Quorum** | Gubernatorial Sovereign Mandate | Signed off by Gov. Dr. Kadri Obafemi Hamzat, Comm. Wahab & Acting MD Olajuwon Mautin Akinyemi. | Lagos State Executive Council |

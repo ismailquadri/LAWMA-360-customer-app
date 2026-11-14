@@ -117,12 +117,18 @@ The engineering team must execute the following modifications across the existin
 * **Audit Findings:**  
   - Completely fails the 64.2% unbanked population who use cash at street kiosks.
   - No separation between master compound liability and individual room contributions.
+  - Fails to handle the "Indivisible Waste Drum" dilemma when compounds fall below the 60% collection quorum.
 * **Action for Dev Team:**  
-  Implement the **Compound Dual-Tier Virtual Wallet**:
+  Implement the **Compound Dual-Tier Virtual Wallet & Quorum Quarantine Engine**:
   1. **Master Compound View (for Landlords / Compound Heads):** Total bill, room payment breakdown table (Room 1 to Room 12), and legal Tenancy Law Sec 44 immunity certificates.
-  2. **Room View (for Individual Tenants):** Individual room assessment (e.g., ₦2,500/month), payment receipt history, and instant proof-of-payment generation to prevent landlord harassment.
-  3. **Kiosk Cash Rails Action:** "Pay with Cash at POS Kiosk" button that generates a 6-digit numeric token (`POS-VOUCH-*`) valid for 24 hours at any Moniepoint, OPay, or PalmPay agent.
-  4. **USSD Offline Action:** Displays shortcode dialog: *"Dial `*384*7006#` from any phone without airtime."*
+  2. **Sub-60% Quorum Quarantine & Green Bag QR Protocol (`ROOM-QR-BAG-*`):**
+     - When compound payment quorum drops below 60% ($Q_{\text{collection}} < 0.60$), render the high-contrast Amber Banner: *"Compound Drum Quarantined"*.
+     - Compliant rooms ($B_i \ge L_i$) are granted an active **"My Green Collection Bags"** digital drawer displaying 4 serialized cryptographic QR codes for the monthly cycle.
+     - When the compactor crew scans the QR code at the doorway, only the compliant room's bags are lifted, leaving the locked communal drum to apply peer pressure on defaulting rooms.
+  3. **Room View (for Individual Tenants):** Individual room assessment (e.g., ₦2,500/month), payment receipt history, and instant proof-of-payment generation to prevent landlord harassment.
+  4. **Kiosk Cash Rails Action:** "Pay with Cash at POS Kiosk" button that generates a 6-digit numeric token (`POS-VOUCH-*`) valid for 24 hours at any Moniepoint, OPay, or PalmPay agent.
+  5. **USSD Offline Action:** Displays shortcode dialog: *"Dial `*384*7006#` from any phone without airtime."*
+  6. **Mobile Court Arrears Escalation Banner:** For accounts with chronic unpaid arrears ($>60$ days), display statutory notice: *"Notice: Subject to Special Offences Court Form 1 Summons and BVN Bank Account Garnishee proceedings."*
 
 ---
 
@@ -248,6 +254,7 @@ When building the production prototype, the development team must verify off the
 
 - [ ] **Remove `ChoosePartner`:** Purge all code allowing users to pick a PSP operator; replace with automatic cadastral ward binding.
 - [ ] **Implement Compound Hierarchy:** Build data structures supporting Compound (`WAL-COMP-*`) and Rooms (`VACC-*`).
+- [ ] **Implement Sub-60% Quorum Quarantine & Green Bag QR Issuance:** Render quarantined drum status, generate serialized `ROOM-QR-BAG-*` tokens for compliant rooms, and handle doorstep selective pickup scans.
 - [ ] **Implement 1.5km Geofence Corridor Radar:** Hook compactor telematics to client-side distance alerts to minimize curb dwell (<20 mins).
 - [ ] **Implement Dual-Key Escrow Verification:** Ensure pickups require both driver 45s physical dwell AND citizen sign-off before funds settle.
 - [ ] **Integrate Kiosk Cash Rails:** Support 6-digit numeric vouchers (`POS-VOUCH-*`) for unbanked cash payments at Moniepoint/OPay kiosks.
